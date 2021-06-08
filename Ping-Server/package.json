@@ -1,0 +1,38 @@
+{
+  "name": "ping-server",
+  "version": "1.0.0",
+  "description": "Social networking and video conferencing application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/elangoram1998/Ping.git"
+  },
+  "keywords": [
+    "chat",
+    "video",
+    "conference"
+  ],
+  "author": "Elango Ramar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elangoram1998/Ping/issues"
+  },
+  "homepage": "https://github.com/elangoram1998/Ping#readme",
+  "dependencies": {
+    "aws-sdk": "^2.923.0",
+    "bcrypt": "^5.0.1",
+    "chalk": "^4.1.1",
+    "config": "^3.3.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.13",
+    "multer": "^1.4.2",
+    "socket.io": "^4.1.2",
+    "uuid": "^8.3.2",
+    "validator": "^13.6.0"
+  }
+}

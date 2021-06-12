@@ -25,6 +25,10 @@ const accountSchema = new mongoose.Schema({
         required: true,
         default: '/app/src/assets/profile.png'
     },
+    bio: {
+        type: String,
+        maxLength: 100
+    },
     password: {
         type: String,
         required: true,
@@ -41,6 +45,51 @@ const accountSchema = new mongoose.Schema({
         }
     }]
 }, { timestamps: true });
+
+accountSchema.pre('save', async function (next) {
+    const user = this;
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 8);
+    }
+    next();
+});
+
+accountSchema.statics.findUserByCredentials = async function (username, password) {
+    const user = await Account.findOne({ username });
+    if (!user) {
+        throw new Error('Account not found');
+    }
+    const decodePassword = await bcrypt.compare(password, user.password);
+    if (!decodePassword) {
+        throw new Error('Username/Password is wrong');
+    }
+    return user;
+}
+
+accountSchema.statics.isUsernameExist = async (username) => {
+    const user = await User.findOne({ username });
+    if (user) {
+        return true;
+    }
+    return false;
+}
+
+accountSchema.methods.generateToken = async function () {
+    const user = this;
+    const token = await jwt.sign({ _id: user._id.toString() }, config.get('tokenKey'));
+    user.tokens = user.tokens.concat({ token });
+    await user.save();
+    return token;
+}
+
+accountSchema.methods.toJSON = function () {
+    const user = this;
+    const accountObject = user.toObject();
+    delete accountObject.password;
+    delete accountObject.tokens;
+
+    return accountObject;
+}
 
 const Account = mongoose.model('Account', accountSchema);
 

@@ -4,7 +4,7 @@
         "port": "27017",
         "dbname": "ping-db"
     },
-    "url": "mongodb://Elango:H4ll0Elango@raven-cluster.ks119.mongodb.net/raven-db?retryWrites=true&w=majority",
+    "url": "",
     "tokenKey": "ping-App:-K4y$",
     "resetKey": "ping-r4s4t-p4ss",
     "server": {

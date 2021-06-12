@@ -1,0 +1,29 @@
+{
+    "database": {
+        "host": "localhost",
+        "port": "27017",
+        "dbname": "ping-db"
+    },
+    "url": "mongodb://Elango:H4ll0Elango@raven-cluster.ks119.mongodb.net/raven-db?retryWrites=true&w=majority",
+    "tokenKey": "ping-App:-K4y$",
+    "resetKey": "ping-r4s4t-p4ss",
+    "server": {
+        "port": "3000"
+    },
+    "cors": {
+        "origin": "http://localhost:4200"
+    },
+    "s3": {
+        "defaultProfilePic": "https://raven-md-store.s3.ap-south-1.amazonaws.com/profile.png"
+    },
+    "nodeMailer": {
+        "transport": {
+            "service": "gmail",
+            "user": "receiveyourraven@gmail.com",
+            "pass": "H4ll0Raven@"
+        },
+        "info": {
+            "from": "receiveyourraven@gmail.com"
+        }
+    }
+}

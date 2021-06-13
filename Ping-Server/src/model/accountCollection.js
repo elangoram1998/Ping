@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
+const config = require('config');
 
 const accountSchema = new mongoose.Schema({
     username: {
@@ -67,7 +68,7 @@ accountSchema.statics.findUserByCredentials = async function (username, password
 }
 
 accountSchema.statics.isUsernameExist = async (username) => {
-    const user = await User.findOne({ username });
+    const user = await Account.findOne({ username });
     if (user) {
         return true;
     }

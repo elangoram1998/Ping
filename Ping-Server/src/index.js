@@ -5,7 +5,7 @@ const http = require('http');
 const socketio = require('socket.io');
 
 require('./database/mongoDB');
-const { error, success } = require('./utils/constants');
+const { errorMsg, success } = require('./utils/constants');
 const HttpStatusCode = require('./utils/httpStatusCode');
 const WebSocket = require('./utils/WebSocket');
 const authRouter = require('./routes/authRoute');
@@ -35,7 +35,7 @@ app.get('*', (req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-    console.error(error(`ERROR: ${error.toString()}`));
+    console.error(errorMsg(`ERROR: ${error.toString()}`));
     return res.status(error.statusCode).json({
         error: error.toString()
     });

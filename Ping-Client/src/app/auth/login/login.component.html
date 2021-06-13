@@ -1,1 +1,45 @@
-<p>login works!</p>
+<div class="page-layout">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <mat-card class="form-card">
+                <div class="card-header">
+                    <p class="form-title text-center">SignIn</p>
+                </div>
+                <form [formGroup]="loginForm" (ngSubmit)="login()">
+                    <mat-form-field appearance="outline">
+                        <img class="form-icon" matPrefix src="../../../assets/username.png" width="30" height="30">
+                        <mat-label>Username</mat-label>
+                        <input type="text" formControlName="username" matInput required>
+                        <mat-error *ngIf="Username?.hasError('required')">
+                            Please enter your username
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <img class="form-icon" matPrefix src="../../../assets/password.png" width="30" height="30">
+                        <mat-label>Password</mat-label>
+                        <input [type]="hidePassword?'password':'text'" matInput formControlName="password" required>
+                        <button type="button" (click)="hidePassword=!hidePassword" matSuffix mat-icon-button>
+                            <mat-icon class="material-icons-two-tone">
+                                {{hidePassword?'visibility_off':'visibility'}}
+                            </mat-icon>
+                        </button>
+                        <mat-error *ngIf="Password?.hasError('required')">
+                            Password is required
+                        </mat-error>
+                    </mat-form-field>
+                    <div class="d-grid">
+                        <button [disabled]="loginForm.invalid" class="form-button btn" type="submit">Submit</button>
+                    </div>
+                </form>
+                <div class="">
+                    <p class="text-center"><a routerLink="/forgotPassword">Forgot password?</a></p>
+                </div>
+                <div class="mt-4 text-center">
+                    <p>Don't have an account? <a routerLink="/SignUp">Sign Up</a></p>
+                </div>
+            </mat-card>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('config');
-const { error, success, warning } = require('../utils/constants');
+const { errorMsg, success, warning } = require('../utils/constants');
 
 
 mongoose.connect(`mongodb://${config.get('database.host')}:${config.get('database.port')}/${config.get('database.dbname')}`, {
@@ -15,7 +15,7 @@ mongoose.connection.on('connected', () => {
 });
 
 mongoose.connection.on('error', () => {
-    console.log(error('MongoDB has some database issue!!'));
+    console.log(errorMsg('MongoDB has some database issue!!'));
 });
 
 mongoose.connection.on('disconnected', () => {

@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~bootstrap/dist/css/bootstrap.css";
-
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+@import '~ngx-toastr/toastr';
 html, body {
     height: 100%;
 }
@@ -9,4 +11,69 @@ html, body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.form-title {
+    font-family: 'Staatliches', cursive;
+    font-size: 30px;
+}
+
+.card-header {
+    background-color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    outline: none;
+}
+
+.app-header {
+    font-family: 'Do Hyeon', sans-serif;
+    font-size: 30px;
+}
+
+button {
+    outline: none;
+}
+
+.page-layout {
+    background-image: linear-gradient(-225deg, #9EFBD3 0%, #57E9F2 48%, #45D4FB 100%);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    overflow-x: hidden;
+}
+
+mat-form-field {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-card {
+    margin-top: 5rem;
+}
+
+.form-icon {
+    margin-right: 10px;
+    margin-bottom: 15px;
+}
+
+.form-button {
+    background-color: #33FFBA;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.avatar-img {
+    border-radius: 50%;
+}
+
+.icon-size {
+    font-size: 32px;
+}
+
+@media(max-width:600px) {
+    .form-card, .item-card, .mat-expansion-panel {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
 }

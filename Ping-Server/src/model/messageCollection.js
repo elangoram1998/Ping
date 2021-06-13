@@ -6,9 +6,14 @@ const messageSchema = new mongoose.Schema({
         required: true,
         ref: 'Account'
     },
-    text: {
+    message: {
         type: String,
         required: true
+    },
+    type: {
+        type: String,
+        required: true,
+        enum: ['text', 'audio', 'image', 'file', 'location']
     },
     messageCount: {
         type: Number,

@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('config');
-const chalk = require('chalk');
+const { error, success, warning } = require('../utils/constants');
 
-const error = chalk.underline.red.bold;
-const success = chalk.underline.green.bold;
-const warning = chalk.keyword('orange');
 
 mongoose.connect(`mongodb://${config.get('database.host')}:${config.get('database.port')}/${config.get('database.dbname')}`, {
     useCreateIndex: true,

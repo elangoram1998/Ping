@@ -3,9 +3,10 @@ const cors = require('cors');
 const config = require('config');
 const http = require('http');
 const socketio = require('socket.io');
-const chalk = require('chalk');
 
 require('./database/mongoDB');
+const { error, success } = require('./utils/constants');
+const HttpStatusCode = require('./utils/httpStatusCode');
 const WebSocket = require('./utils/WebSocket');
 const authRouter = require('./routes/authRoute');
 const messageRouter = require('./routes/messageRoute');
@@ -16,7 +17,6 @@ app.use(cors({
     origin: config.get('cors.origin')
 }));
 const server = http.createServer(app);
-const success = chalk.underline.green.bold;
 
 global.io = socketio(server, {
     cors: {
@@ -27,6 +27,19 @@ global.io = socketio(server, {
 io.on('connection', WebSocket.connection);
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
+
+app.get('*', (req, res, next) => {
+    let error = new Error('Page Not Found');
+    error.statusCode = HttpStatusCode.NOT_FOUND;
+    next(error);
+});
+
+app.use((error, req, res, next) => {
+    console.error(error(`ERROR: ${error.toString()}`));
+    return res.status(error.statusCode).json({
+        error: error.toString()
+    });
+});
 
 const PORT = process.env.PORT || config.get('server.port');
 

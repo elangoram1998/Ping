@@ -6,20 +6,35 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AppState } from '../reducers';
+import { select, Store } from '@ngrx/store';
+import { isLoggedIn } from '../auth/selectors/account.selectors';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
-  constructor() { }
+  isUserLogged: boolean = false;
+
+  constructor(private store: Store<AppState>) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-    request = request.clone({
-      setHeaders: {
-        authorization: `Bearer `
+    this.store.pipe(select(isLoggedIn)).subscribe(
+      isLogged => {
+        this.isUserLogged = isLogged;
       }
-    });
-
+    );
+    const token = localStorage.getItem('token');
+    const isApiUrl = !request.url.startsWith(environment.apiUrl);
+    if (this.isUserLogged && token && isApiUrl) {
+      console.log(`jwt intercepted url: ${request.url}`);
+      request = request.clone({
+        setHeaders: {
+          authorization: `Bearer ${token}`
+        }
+      });
+    }
     return next.handle(request);
   }
 }

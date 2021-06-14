@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Account } from '../interfaces/account';
 import { handleError } from '../utils/errorHandler';
@@ -21,7 +21,11 @@ export class AuthService {
 
   loginAccount(username: string, password: string): Observable<{ account: Account, token: string }> {
     return this.http.post<{ account: Account, token: string }>(environment.login, { username, password }).pipe(
-      catchError(handleError)
+      catchError(handleError),
+      tap((res: { account: Account, token: string }) => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('account', JSON.stringify(res.account));
+      })
     );
   }
 

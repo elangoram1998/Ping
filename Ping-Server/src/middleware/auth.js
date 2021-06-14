@@ -3,6 +3,7 @@ const config = require('config');
 
 const Account = require('../model/accountCollection');
 const Contact = require('../model/contactsCollection');
+const logger = require('../utils/logger');
 
 const auth = async (req, res, next) => {
     try {
@@ -12,14 +13,13 @@ const auth = async (req, res, next) => {
         if (!account) {
             throw new Error('account session timeout');
         }
-        const contacts = await Contact.find({ myID: account._id });
+        logger(`${account.username} has authendicated..`);
         req.account = account;
-        req.contacts = contacts;
         req.token = token;
         next();
     }
     catch (e) {
-        console.log(e);
+        console.error(e);
         res.status(401).send({ 'Error': 'Please authendicate' });
     }
 }

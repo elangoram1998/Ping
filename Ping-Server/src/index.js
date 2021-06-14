@@ -9,6 +9,7 @@ const { errorMsg, success } = require('./utils/constants');
 const HttpStatusCode = require('./utils/httpStatusCode');
 const WebSocket = require('./utils/WebSocket');
 const authRouter = require('./routes/authRoute');
+const homeRouter = require('./routes/homeRoute');
 const messageRouter = require('./routes/messageRoute');
 
 const app = express();
@@ -27,6 +28,7 @@ global.io = socketio(server, {
 io.on('connection', WebSocket.connection);
 app.use('/api/auth', authRouter);
 app.use('/api/message', messageRouter);
+app.use('/api/home', homeRouter);
 
 app.get('*', (req, res, next) => {
     let error = new Error('Page Not Found');

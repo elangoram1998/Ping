@@ -4,10 +4,12 @@
 
 export const environment = {
   production: false,
+  apiUrl: 'http://localhost:3000/api/auth',
   register: 'http://localhost:3000/api/auth/register',
   login: 'http://localhost:3000/api/auth/login',
   logout: 'http://localhost:3000/api/auth/logout',
-  checkUsername: 'http://localhost:3000/api/auth/checkUsername'
+  checkUsername: 'http://localhost:3000/api/auth/checkUsername',
+  loadContacts: 'http://localhost:3000/api/home/loadContacts'
 };
 
 /*

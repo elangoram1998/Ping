@@ -1,1 +1,16 @@
-<p>home works!</p>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        <mat-toolbar>
+            <img src="../../../assets/logo.png" width="50" height="50">
+        </mat-toolbar>
+        <mat-selection-list [multiple]="false">
+            <mat-list-option *ngFor="let contact of contacts$ | async">
+                <img [src]="contact.contactID.avatar">
+                <p matLine><b>{{contact.contactID.username}}</b></p>
+                <mat-divider></mat-divider>
+            </mat-list-option>
+        </mat-selection-list>
+    </div>
+    <div class="col-sm-4"></div>
+</div>

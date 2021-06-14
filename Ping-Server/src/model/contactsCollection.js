@@ -20,7 +20,8 @@ const contactSchema = new mongoose.Schema({
     totalMessageCount: {
         type: Number,
         default: 0,
-        required: true
+        required: true,
+        min: [0, "message count should not below zero"]
     },
     readMessageCount: {
         type: Number,

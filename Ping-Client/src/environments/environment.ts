@@ -11,7 +11,8 @@ export const environment = {
   checkUsername: 'http://localhost:3000/api/auth/checkUsername',
   loadContacts: 'http://localhost:3000/api/home/loadContacts',
   searchUsers: 'http://localhost:3000/api/home/searchUsers',
-  addContact: 'http://localhost:3000/api/home/addContact'
+  addContact: 'http://localhost:3000/api/home/addContact',
+  loadMyMessages: 'http://localhost:3000/api/chat/loadMessages'
 };
 
 /*

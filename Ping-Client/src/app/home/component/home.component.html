@@ -1,6 +1,6 @@
 <div class="page-layout">
     <div class="row">
-        <div class="col-sm-4"></div>
+        <div class="col-sm-4 dummy"></div>
         <div class="col-sm-4">
             <mat-toolbar>
                 <img class="mt-3" src="../../../assets/logo.png" width="65" height="65">
@@ -16,14 +16,17 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-toolbar>
-            <mat-selection-list [multiple]="false">
-                <mat-list-option *ngFor="let contact of contacts$ | async">
-                    <img [src]="contact.contactID.avatar">
-                    <p matLine><b>{{contact.contactID.username}}</b></p>
-                    <mat-divider></mat-divider>
-                </mat-list-option>
-            </mat-selection-list>
+            <div class="contact-list">
+                <mat-selection-list [multiple]="false">
+                    <mat-list-option (click)="goToChat(contact.roomID,contact.contactID._id)"
+                        *ngFor="let contact of contacts$ | async">
+                        <img matListAvatar [src]="contact.contactID.avatar">
+                        <p matLine><b>{{contact.contactID.username}}</b></p>
+                        <mat-divider></mat-divider>
+                    </mat-list-option>
+                </mat-selection-list>
+            </div>
         </div>
-        <div class="col-sm-4"></div>
+        <div class="col-sm-4 dummy"></div>
     </div>
 </div>

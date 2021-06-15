@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -24,7 +25,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   accountSubcription$!: Subscription;
 
   constructor(private store: Store<AppState>,
-    private homeService: HomeService) { }
+    private homeService: HomeService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.load();
@@ -56,6 +58,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addContact(account: Search) {
     this.homeService.addContact(account._id).subscribe();
+  }
+
+  goToChat(roomID: string, contactID: string) {
+    this.router.navigate(['chat'], { queryParams: { roomID, contactID } });
   }
 
   ngOnDestroy(): void {

@@ -8,6 +8,7 @@ const { createContact, sendContactData } = require('../utils/createContact');
 
 const loadContacts = async (req, res, next) => {
     const myAccountID = req.account._id;
+    logger(`Load contacts for ${myAccountID}`);
     const contacts = await Contact.find({ myID: myAccountID }).populate('contactID').catch((error) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
         next(error);

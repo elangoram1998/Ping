@@ -31,7 +31,7 @@ const routes: Routes = [
     path: "chat",
     loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule),
     canActivate: [AuthGuard],
-    resolve: [ChatResolver]
+    resolve: [HomeResolver, ChatResolver]
   },
   {
     path: "videoOraudioCall",

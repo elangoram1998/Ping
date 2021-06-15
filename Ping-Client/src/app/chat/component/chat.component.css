@@ -1,0 +1,22 @@
+.row {
+    height: 100%;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.chat-window {
+    background-color: white;
+    height: 680px;
+}
+
+@media(max-width:600px) {
+    .dummy {
+        display: none;
+    }
+}

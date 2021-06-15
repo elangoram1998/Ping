@@ -12,7 +12,7 @@ export const environment = {
   loadContacts: 'http://localhost:3000/api/home/loadContacts',
   searchUsers: 'http://localhost:3000/api/home/searchUsers',
   addContact: 'http://localhost:3000/api/home/addContact',
-  loadMyMessages: 'http://localhost:3000/api/chat/loadMessages'
+  loadMyMessages: 'http://localhost:3000/api/message/loadMessages'
 };
 
 /*

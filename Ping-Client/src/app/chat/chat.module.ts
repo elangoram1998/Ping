@@ -6,6 +6,9 @@ import { StoreModule } from '@ngrx/store';
 import * as fromMessages from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { MessagesEffects } from './effects/messages.effects';
+import { MaterialModule } from '../material/material.module';
+import { ContactsEffects } from '../home/effects/contacts.effects';
+import { MessagesComponent } from './component/messages/messages.component';
 
 const routes: Routes = [
   {
@@ -15,12 +18,13 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  declarations: [ChatComponent],
+  declarations: [ChatComponent, MessagesComponent],
   imports: [
     CommonModule,
+    MaterialModule,
     RouterModule.forChild(routes),
     StoreModule.forFeature(fromMessages.messagesFeatureKey, fromMessages.messageReducer, { metaReducers: fromMessages.metaReducers }),
-    EffectsModule.forFeature([MessagesEffects])
+    EffectsModule.forFeature([MessagesEffects, ContactsEffects])
   ],
   exports: [RouterModule]
 })

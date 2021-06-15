@@ -10,6 +10,11 @@ export const allContactsLoaded = createAction(
   props<{ contacts: Contact[] }>()
 );
 
+export const contactAdded = createAction(
+  '[New Contact Added] Contact Added',
+  props<{ contact: Contact }>()
+);
+
 
 
 

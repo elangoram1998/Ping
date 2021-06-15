@@ -14,7 +14,6 @@ const contactSchema = new mongoose.Schema({
     roomID: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
     totalMessageCount: {

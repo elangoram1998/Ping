@@ -2,7 +2,7 @@ const Account = require('../model/accountCollection');
 const logger = require('../utils/logger');
 const HttpStatusCode = require('../utils/httpStatusCode');
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     const payload = req.body;
     const account = new Account(payload);
     await account.save().catch((error) => {
@@ -34,7 +34,7 @@ const login = async (req, res, next) => {
     });
 }
 
-const usernameExist = async (req, res) => {
+const usernameExist = async (req, res, next) => {
     const username = req.query.username;
     const isUsernameExist = await Account.isUsernameExist(username).catch((error) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
@@ -47,7 +47,7 @@ const usernameExist = async (req, res) => {
     res.status(HttpStatusCode.OK).send(false);
 }
 
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
     req.account.tokens.filter(tokens => tokens.token != req.token);
     await req.account.save().catch((error) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;

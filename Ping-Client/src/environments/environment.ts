@@ -9,7 +9,9 @@ export const environment = {
   login: 'http://localhost:3000/api/auth/login',
   logout: 'http://localhost:3000/api/auth/logout',
   checkUsername: 'http://localhost:3000/api/auth/checkUsername',
-  loadContacts: 'http://localhost:3000/api/home/loadContacts'
+  loadContacts: 'http://localhost:3000/api/home/loadContacts',
+  searchUsers: 'http://localhost:3000/api/home/searchUsers',
+  addContact: 'http://localhost:3000/api/home/addContact'
 };
 
 /*

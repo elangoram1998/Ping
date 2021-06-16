@@ -1,6 +1,7 @@
 const logger = require('../utils/logger');
 const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
+const { addUser, getSocketID, getUser, removeUser } = require('../utils/users');
 
 const loadMessages = async (req, res, next) => {
     const roomID = req.query.roomID;
@@ -13,10 +14,33 @@ const loadMessages = async (req, res, next) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
         next(error);
     });
-    logger(`${roomID} has been fetched`);
+    logger(`${roomID} messages has been fetched`);
     res.status(HttpStatusCode.OK).send(chatRoom);
 }
 
+const storeSocketID = async (req, res, next) => {
+    const socketID = req.body.socketID;
+    const userID = req.body.userID;
+    const { error, user } = addUser({ socketID, userID });
+    if (error) {
+        error.statusCode = HttpStatusCode.NOT_FOUND;
+        next(error);
+    }
+    res.status(HttpStatusCode.OK).send(user);
+}
+
+const removeSocketID = async (req, res, next) => {
+    const socketID = req.body.socketID;
+    const { users, error } = removeUser(socketID);
+    if (error) {
+        error.statusCode = HttpStatusCode.NOT_FOUND;
+        next(error);
+    }
+    res.status(HttpStatusCode.OK).send();
+}
+
 module.exports = {
-    loadMessages
+    loadMessages,
+    storeSocketID,
+    removeSocketID
 }

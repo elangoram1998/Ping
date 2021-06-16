@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  server: 'http://localhost:3000',
   apiUrl: 'http://localhost:3000/api/auth',
   register: 'http://localhost:3000/api/auth/register',
   login: 'http://localhost:3000/api/auth/login',
@@ -12,7 +13,9 @@ export const environment = {
   loadContacts: 'http://localhost:3000/api/home/loadContacts',
   searchUsers: 'http://localhost:3000/api/home/searchUsers',
   addContact: 'http://localhost:3000/api/home/addContact',
-  loadMyMessages: 'http://localhost:3000/api/message/loadMessages'
+  loadMyMessages: 'http://localhost:3000/api/message/loadMessages',
+  storeSocketID: 'http://localhost:3000/api/message/storeSocketID',
+  removeSocketID: 'http://localhost:3000/api/message/removeSocketID'
 };
 
 /*

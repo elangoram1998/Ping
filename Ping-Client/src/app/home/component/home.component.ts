@@ -9,6 +9,7 @@ import { Contact } from 'src/app/interfaces/contact';
 import { Search } from 'src/app/interfaces/search';
 import { AppState } from 'src/app/reducers';
 import { HomeService } from 'src/app/services/home.service';
+import { SocketService } from 'src/app/services/socket.service';
 import { selectAllContacts } from '../selectors/contacts.selectors';
 
 @Component({
@@ -23,10 +24,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   searchResult$!: Observable<Search[]>;
   account!: Account;
   accountSubcription$!: Subscription;
+  disposeConnection!: VoidFunction;
 
   constructor(private store: Store<AppState>,
     private homeService: HomeService,
-    private router: Router) { }
+    private router: Router,
+    private socketService: SocketService) { }
 
   ngOnInit(): void {
     this.load();
@@ -40,6 +43,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.account = account;
       }
     );
+
+    this.disposeConnection = this.socketService.connect();
   }
 
   ngAfterViewInit(): void {

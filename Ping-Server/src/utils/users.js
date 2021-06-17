@@ -14,6 +14,7 @@ const addUser = ({ socketID, userID }) => {
 
     const user = { socketID, userID }
     users.push(user);
+    logger(`${users}`);
     logger(`${userID} connected to the socket ID ${socketID}`);
     return user;
 }

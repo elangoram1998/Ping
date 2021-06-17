@@ -8,8 +8,14 @@
             </mat-toolbar>
             <app-messages></app-messages>
             <div>
-                <input type="text" placeholder="Type message..">
-                <button mat-raised-button>send</button>
+                <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+                    <mat-form-field>
+                        <input matInput formControlName="message" type="text" placeholder="Type message..">
+                        <button type="submit" mat-raised-button matSuffix [disabled]="messageForm.invalid">
+                            send
+                        </button>
+                    </mat-form-field>
+                </form>
             </div>
         </div>
         <div class="col-sm-4 dummy"></div>

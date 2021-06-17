@@ -9,6 +9,7 @@ import { MessagesEffects } from './effects/messages.effects';
 import { MaterialModule } from '../material/material.module';
 import { ContactsEffects } from '../home/effects/contacts.effects';
 import { MessagesComponent } from './component/messages/messages.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
   declarations: [ChatComponent, MessagesComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     MaterialModule,
     RouterModule.forChild(routes),
     StoreModule.forFeature(fromMessages.messagesFeatureKey, fromMessages.messageReducer, { metaReducers: fromMessages.metaReducers }),

@@ -13,3 +13,8 @@ export const isMessagesLoaded = createSelector(
     selectAllMsgCollection,
     (chats: MessageCollection[], props: { roomID: string }) => chats.find(chats => chats.roomID === props.roomID)?.areMessagesLoaded
 );
+
+export const selectChatRoom = createSelector(
+    selectAllMsgCollection,
+    (chats: any[], props: { roomID: string }) => chats.find(chats => chats.roomID === props.roomID)
+);

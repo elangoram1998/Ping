@@ -24,10 +24,6 @@ export class SocketService implements OnDestroy {
   accountSubscription!: Subscription;
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
-    // this.receiveMessage().subscribe(
-    //   (roomID: string, message: Message) => {
-    //     this.updateMessageCollection(message, roomID);
-    //   });
   }
 
   connect() {
@@ -44,6 +40,9 @@ export class SocketService implements OnDestroy {
         console.log("Application socket ID: " + this.socket.id);
         localStorage.setItem('socket', 'loaded');
         this.http.post(environment.storeSocketID, { socketID: this.socket.id, userID: this.account._id }).subscribe(console.log);
+      });
+      this.socket.on('message', (payload: { message: Message, roomID: string }) => {
+        this.updateMessageCollection(payload.message, payload.roomID);
       });
     }
 
@@ -69,7 +68,6 @@ export class SocketService implements OnDestroy {
         myChatRoom = { ...chatRoom };
       }
     );
-    console.log(myChatRoom);
     myChatRoom.messages = Object.assign([], myChatRoom.messages);
     myChatRoom.messages.push(message);
     const update: Update<MessageCollection> = {
@@ -78,15 +76,6 @@ export class SocketService implements OnDestroy {
     }
     this.store.dispatch(insertMessage({ update }));
     chatRoomSubscription.unsubscribe();
-  }
-
-  receiveMessage() {
-    return Observable.create((observer: any) => {
-      this.socket.on('message', (payload: { message: Message, roomID: string }) => {
-        console.log("Incoming message: " + payload.message.message);
-        observer.next(payload.roomID, payload.message);
-      });
-    });
   }
 
   ngOnDestroy(): void {

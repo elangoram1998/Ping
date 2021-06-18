@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const ChatRoom = require('../model/chatRoomCollection');
 const chatRoom = require('../model/chatRoomCollection');
 const Message = require('../model/messageCollection');
-const { removeUser } = require('./users');
+const { removeUser, getSocketID } = require('./users');
 const { sendMessage } = require('./realTimeData');
 
 const error = chalk.underline.red.bold;
@@ -35,8 +35,31 @@ class WebSocket {
             }
         });
 
+        socket.on('call', ({ contactID, myID, peerID }) => {
+            const socketID = getSocketID(contactID);
+            const callerID = myID;
+            if (socketID) {
+                global.io.to(socketID).emit('getting-call', callerID, peerID);
+            }
+        });
+
+        socket.on('answer-call', ({ callerID, peerID }) => {
+            const socketID = getSocketID(callerID);
+            if (socketID) {
+                global.io.to(socketID).emit('call-picked', peerID);
+            }
+        });
+
+        socket.on('disconnect-call', ({ contactID, peerID }) => {
+            const socketID = getSocketID(contactID);
+            if (socketID) {
+                global.io.to(socketID).emit('user-disconnected', peerID);
+            }
+        });
+
         socket.on('disconnect', () => {
             console.log(warning("WebSocket connection disconnected"));
+            removeUser(socket.id);
         });
     }
 }

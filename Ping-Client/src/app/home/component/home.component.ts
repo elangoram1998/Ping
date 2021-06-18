@@ -9,6 +9,7 @@ import { Contact } from 'src/app/interfaces/contact';
 import { Search } from 'src/app/interfaces/search';
 import { AppState } from 'src/app/reducers';
 import { HomeService } from 'src/app/services/home.service';
+import { PeerService } from 'src/app/services/peer.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { selectAllContacts } from '../selectors/contacts.selectors';
 
@@ -24,12 +25,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   searchResult$!: Observable<Search[]>;
   account!: Account;
   accountSubcription$!: Subscription;
-  disposeConnection!: VoidFunction;
+  disposeSocketConnection!: VoidFunction;
+  disposePeerConnection!: VoidFunction;
 
   constructor(private store: Store<AppState>,
     private homeService: HomeService,
     private router: Router,
-    private socketService: SocketService) { }
+    private socketService: SocketService,
+    private peerService: PeerService) { }
 
   ngOnInit(): void {
     this.load();
@@ -44,7 +47,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     );
 
-    this.disposeConnection = this.socketService.connect();
+    this.disposeSocketConnection = this.socketService.connect();
+    this.disposePeerConnection = this.peerService.connect();
   }
 
   ngAfterViewInit(): void {

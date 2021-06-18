@@ -38,12 +38,16 @@ export class SocketService implements OnDestroy {
 
       this.socket.on("connect", () => {
         console.log("Application socket ID: " + this.socket.id);
-        localStorage.setItem('socket', 'loaded');
+        localStorage.setItem('socket', JSON.stringify(this.socket));
         this.http.post(environment.storeSocketID, { socketID: this.socket.id, userID: this.account._id }).subscribe(console.log);
       });
       this.socket.on('message', (payload: { message: Message, roomID: string }) => {
         this.updateMessageCollection(payload.message, payload.roomID);
       });
+    }
+    else {
+      const localSocket = localStorage.getItem('socket') || "";
+      this.socket = JSON.parse(localSocket);
     }
 
     return () => {
@@ -76,6 +80,42 @@ export class SocketService implements OnDestroy {
     }
     this.store.dispatch(insertMessage({ update }));
     chatRoomSubscription.unsubscribe();
+  }
+
+  mediaCall(contactID: string, myID: string, peerID: string) {
+    this.socket.emit('call', { contactID, myID, peerID });
+  }
+
+  answerCall(callerID: string, peerID: string) {
+    this.socket.emit('answer-call', { callerID, peerID });
+  }
+
+  disconnectCall(contactID: string, peerID: string) {
+    this.socket.emit('disconnect-call', { contactID, peerID });
+  }
+
+  gettingCall() {
+    return Observable.create((observer: any) => {
+      this.socket.on('getting-call', (callerID: string, peerID: string) => {
+        observer.next(callerID, peerID);
+      });
+    });
+  }
+
+  callPicked() {
+    return Observable.create((observer: any) => {
+      this.socket.on('call-picked', (peerID: string) => {
+        observer.next(peerID);
+      });
+    });
+  }
+
+  callDisconnected() {
+    return Observable.create((observer: any) => {
+      this.socket.on('user-disconnected', (peerID: string) => {
+        observer.next(peerID);
+      });
+    });
   }
 
   ngOnDestroy(): void {

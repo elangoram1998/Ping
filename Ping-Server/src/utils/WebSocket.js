@@ -5,7 +5,7 @@ const Message = require('../model/messageCollection');
 const { removeUser, getSocketID } = require('./users');
 const { sendMessage } = require('./realTimeData');
 
-const error = chalk.underline.red.bold;
+const errorMsg = chalk.underline.red.bold;
 const success = chalk.underline.green.bold;
 const warning = chalk.keyword('orange');
 
@@ -31,15 +31,15 @@ class WebSocket {
                 callback({ message: messagePopulated, roomID });
             }
             catch (error) {
-                console.error(error(`Something went wrong, Error: ${error}`));
+                console.error(errorMsg(`Something went wrong, Error: ${error}`));
             }
         });
 
-        socket.on('call', ({ contactID, myID, peerID }) => {
+        socket.on('call', ({ contactID, account }) => {
             const socketID = getSocketID(contactID);
-            const callerID = myID;
+            const caller = account;
             if (socketID) {
-                global.io.to(socketID).emit('getting-call', callerID, peerID);
+                global.io.to(socketID).emit('getting-call', caller);
             }
         });
 

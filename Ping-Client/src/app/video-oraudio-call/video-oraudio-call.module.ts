@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VideoOraudioCallComponent } from './component/video-oraudio-call.component';
 import { RouterModule, Routes } from '@angular/router';
+import { MaterialModule } from '../material/material.module';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
   declarations: [VideoOraudioCallComponent],
   imports: [
     CommonModule,
+    MaterialModule,
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule]

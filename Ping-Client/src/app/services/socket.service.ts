@@ -38,7 +38,7 @@ export class SocketService implements OnDestroy {
 
       this.socket.on("connect", () => {
         console.log("Application socket ID: " + this.socket.id);
-        localStorage.setItem('socket', JSON.stringify(this.socket));
+        localStorage.setItem('socket', "loaded");
         this.http.post(environment.storeSocketID, { socketID: this.socket.id, userID: this.account._id }).subscribe(console.log);
       });
       this.socket.on('message', (payload: { message: Message, roomID: string }) => {
@@ -47,7 +47,7 @@ export class SocketService implements OnDestroy {
     }
     else {
       const localSocket = localStorage.getItem('socket') || "";
-      this.socket = JSON.parse(localSocket);
+      //this.socket = JSON.parse(localSocket);
     }
 
     return () => {
@@ -82,8 +82,8 @@ export class SocketService implements OnDestroy {
     chatRoomSubscription.unsubscribe();
   }
 
-  mediaCall(contactID: string, myID: string, peerID: string) {
-    this.socket.emit('call', { contactID, myID, peerID });
+  mediaCall(contactID: string, account: Account) {
+    this.socket.emit('call', { contactID, account });
   }
 
   answerCall(callerID: string, peerID: string) {
@@ -96,8 +96,8 @@ export class SocketService implements OnDestroy {
 
   gettingCall() {
     return Observable.create((observer: any) => {
-      this.socket.on('getting-call', (callerID: string, peerID: string) => {
-        observer.next(callerID, peerID);
+      this.socket.on('getting-call', (caller: Account) => {
+        observer.next(caller);
       });
     });
   }

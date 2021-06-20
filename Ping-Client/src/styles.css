@@ -77,3 +77,9 @@ mat-form-field {
         margin-right: 30px;
     }
 }
+
+@media(max-width:600px) {
+    .dummy {
+        display: none;
+    }
+}

@@ -7,6 +7,7 @@ import * as fromContacts from './reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { ContactsEffects } from './effects/contacts.effects';
 import { MaterialModule } from '../material/material.module';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     MaterialModule,
+    SharedModule,
     RouterModule.forChild(routes),
     StoreModule.forFeature(fromContacts.contactsFeatureKey, fromContacts.contactReducer, { metaReducers: fromContacts.metaReducers }),
     EffectsModule.forFeature([ContactsEffects])

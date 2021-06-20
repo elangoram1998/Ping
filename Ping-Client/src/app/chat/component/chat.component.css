@@ -15,8 +15,3 @@
     height: 680px;
 }
 
-@media(max-width:600px) {
-    .dummy {
-        display: none;
-    }
-}

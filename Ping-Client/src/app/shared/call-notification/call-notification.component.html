@@ -1,1 +1,4 @@
-<p>call-notification works!</p>
+<div *ngIf="notification">
+    <span>Getting call from {{caller.username}}</span>
+    <button (click)="answerCall()">answer</button>
+</div>

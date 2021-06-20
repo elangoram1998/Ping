@@ -18,3 +18,8 @@ export const selectContact = createSelector(
     selectAllContacts,
     (contacts: Contact[], props: { roomID: string }) => contacts.find(contacts => contacts.roomID === props.roomID)
 );
+
+export const selectContactByID = createSelector(
+    selectAllContacts,
+    (contacts: Contact[], props: { contactID: string }) => contacts.find(contacts => contacts.contactID._id === props.contactID)
+);

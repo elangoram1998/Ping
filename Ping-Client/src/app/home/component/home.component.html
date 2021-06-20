@@ -16,6 +16,7 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-toolbar>
+            <app-call-notification></app-call-notification>
             <div class="contact-list">
                 <mat-selection-list [multiple]="false">
                     <mat-list-option (click)="goToChat(contact.roomID,contact.contactID._id)"

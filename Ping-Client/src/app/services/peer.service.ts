@@ -1,6 +1,7 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as Peer from 'peerjs';
-import { BehaviorSubject, Observable } from 'rxjs';
+import Peer from 'peerjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class PeerService {
   peerSubject = new BehaviorSubject("");
   mediaTracks: MediaStreamTrack[] = [];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   connect() {
     this.peerObject = new Peer(undefined, {
@@ -42,5 +43,13 @@ export class PeerService {
         this.mediaTracks.forEach(track => track.stop());
       }
     });
+  }
+
+  checkOnline(contactID: string): Observable<boolean> {
+    const params = new HttpParams().set('contactID', contactID);
+    return of(true)
+    // return this.http.get<boolean>(environment.checkOnline, { params }).pipe(
+    //   catchError(handleError)
+    // );
   }
 }

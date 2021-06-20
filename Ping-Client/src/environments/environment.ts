@@ -15,7 +15,8 @@ export const environment = {
   addContact: 'http://localhost:3000/api/home/addContact',
   loadMyMessages: 'http://localhost:3000/api/message/loadMessages',
   storeSocketID: 'http://localhost:3000/api/message/storeSocketID',
-  removeSocketID: 'http://localhost:3000/api/message/removeSocketID'
+  removeSocketID: 'http://localhost:3000/api/message/removeSocketID',
+  checkOnline: 'http://localhost:3000/api/message/checkOnline'
 };
 
 /*

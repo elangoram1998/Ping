@@ -8,6 +8,7 @@ import { selectContact } from 'src/app/home/selectors/contacts.selectors';
 import { Account } from 'src/app/interfaces/account';
 import { Contact } from 'src/app/interfaces/contact';
 import { AppState } from 'src/app/reducers';
+import { PeerService } from 'src/app/services/peer.service';
 import { SocketService } from 'src/app/services/socket.service';
 
 @Component({
@@ -29,7 +30,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private socketService: SocketService) { }
+    private socketService: SocketService,
+    private peerService: PeerService) { }
 
   messageForm = this.fb.group({
     message: ['', Validators.required]
@@ -63,6 +65,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (this.messageForm.valid) {
       setTimeout(() => this.formGroupDirective.resetForm(), 0);
     }
+  }
+
+  mediaCall() {
+    this.peerService.checkOnline(this.contactID).subscribe(
+      isOnline => {
+        if (isOnline) {
+          this.router.navigate(['videoOraudioCall'], { queryParams: { contactID: this.contactID, action: 'call' } });
+        }
+        else {
+
+        }
+      }
+    )
   }
 
   get Message() {

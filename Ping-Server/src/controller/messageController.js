@@ -39,8 +39,18 @@ const removeSocketID = async (req, res, next) => {
     res.status(HttpStatusCode.OK).send();
 }
 
+const checkOnline = async (req, res, next) => {
+    const contactID = req.query.contactID;
+    const user = getUser(contactID);
+    if (user) {
+        return res.status(HttpStatusCode.OK).send(true);
+    }
+    res.status(HttpStatusCode.OK).send(false);
+}
+
 module.exports = {
     loadMessages,
     storeSocketID,
-    removeSocketID
+    removeSocketID,
+    checkOnline
 }

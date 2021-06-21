@@ -28,6 +28,8 @@ export class PeerService {
     });
     localStorage.setItem("peer", "loaded");
     return () => {
+      console.log("peer connection disconnected");
+      localStorage.removeItem("peer");
       this.peerObject.destroy();
     }
   }
@@ -44,13 +46,6 @@ export class PeerService {
         this.mediaTracks.forEach(track => track.stop());
       }
     });
-  }
-
-  checkOnline(contactID: string): Observable<boolean> {
-    const params = new HttpParams().set('contactID', contactID);
-    return this.http.get<boolean>(environment.checkOnline, { params }).pipe(
-      catchError(handleError)
-    );
   }
 
   get PeerObject() {

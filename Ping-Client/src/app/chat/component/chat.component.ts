@@ -30,8 +30,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private socketService: SocketService,
-    private peerService: PeerService) { }
+    private socketService: SocketService) { }
 
   messageForm = this.fb.group({
     message: ['', Validators.required]
@@ -68,7 +67,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   mediaCall() {
-    this.peerService.checkOnline(this.contactID).subscribe(
+    this.socketService.checkOnline(this.contactID).subscribe(
       isOnline => {
         if (isOnline) {
           this.router.navigate(['videoOraudioCall'], { queryParams: { contactID: this.contactID, action: 'call' } });

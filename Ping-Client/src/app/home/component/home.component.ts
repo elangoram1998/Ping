@@ -26,13 +26,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   account!: Account;
   accountSubcription$!: Subscription;
   disposeSocketConnection!: VoidFunction;
-  disposePeerConnection!: VoidFunction;
 
   constructor(private store: Store<AppState>,
     private homeService: HomeService,
     private router: Router,
-    private socketService: SocketService,
-    private peerService: PeerService) { }
+    private socketService: SocketService) { }
 
   ngOnInit(): void {
     this.load();
@@ -48,7 +46,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     this.disposeSocketConnection = this.socketService.connect();
-    this.disposePeerConnection = this.peerService.connect();
   }
 
   ngAfterViewInit(): void {

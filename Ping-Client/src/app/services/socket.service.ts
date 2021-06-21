@@ -1,9 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { Update } from '@ngrx/entity';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { selectAccount } from '../auth/selectors/account.selectors';
@@ -13,6 +13,7 @@ import { Account } from '../interfaces/account';
 import { Message } from '../interfaces/message';
 import { MessageCollection } from '../interfaces/message-collection';
 import { AppState } from '../reducers';
+import { handleError } from '../utils/errorHandler';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +64,13 @@ export class SocketService implements OnDestroy {
     this.socket.emit('sendMessage', { roomID, myID, text, contactID }, (response: { message: Message, roomID: string }) => {
       this.updateMessageCollection(response.message, roomID);
     });
+  }
+
+  checkOnline(contactID: string): Observable<boolean> {
+    const params = new HttpParams().set('contactID', contactID);
+    return this.http.get<boolean>(environment.checkOnline, { params }).pipe(
+      catchError(handleError)
+    );
   }
 
   updateMessageCollection(message: Message, roomID: string) {

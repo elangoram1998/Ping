@@ -28,16 +28,18 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
   myMediaStream$: Observable<MediaStream> = this.peerService.getUserMedia(true, true);
   mediaSubscription$!: Subscription;
   sendMyStream$: Observable<MediaStream> = this.peerService.getUserMedia(true, true);
-  contactMediaSubscription$!: Subscription;
+  contactMediaSubscription$: Subscription = new Subscription;
   contact!: Contact | undefined;
   contactSubscription$!: Subscription;
   account!: Account;
   accountSubscription$!: Subscription;
   callPickedSubscription$!: Subscription;
   callDisconnectedSubcription$!: Subscription;
+  callNotRepondedSubscription$!: Subscription;
   connectedPeers: any = {};
   myvideoTracks: MediaStreamTrack[] = [];
   contactVideoTracks: MediaStreamTrack[] = [];
+  isPeerConnected: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private store: Store<AppState>,
@@ -95,6 +97,12 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
         this.location.back();
       }
     );
+
+    this.callNotRepondedSubscription$ = this.socketService.notResponded().subscribe(
+      (contactID: string) => {
+        this.disconnectCall();
+      }
+    );
   }
 
   answerCall() {
@@ -115,6 +123,7 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
           video.remove();
         });
         this.connectedPeers = call;
+        this.isPeerConnected = true;
         console.log(this.connectedPeers);
       }
     );
@@ -135,6 +144,7 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
             video.remove();
           });
           this.connectedPeers = call;
+          this.isPeerConnected = true;
           console.log(this.connectedPeers);
         }
       );
@@ -165,21 +175,35 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
   }
 
   disconnectCall() {
-    this.socketService.disconnectCall(this.contactID, this.peerID);
+    if (this.isPeerConnected) {
+      this.socketService.disconnectCall(this.contactID, this.peerID);
+      this.myvideoTracks.forEach(track => track.stop());
+      this.contactVideoTracks.forEach(track => track.stop());
+      this.connectedPeers.close();
+      this.peerObject.destroy();
+      this.location.back();
+    }
+    else {
+      this.socketService.cancelMediaCall(this.contactID, this.account);
+      this.cancelMediaCall();
+    }
+  }
+
+  cancelMediaCall() {
     this.myvideoTracks.forEach(track => track.stop());
-    this.contactVideoTracks.forEach(track => track.stop());
-    this.connectedPeers.close();
     this.peerObject.destroy();
     this.location.back();
   }
 
   ngOnDestroy(): void {
+    this.isPeerConnected = false;
     this.mediaSubscription$.unsubscribe();
     this.contactSubscription$.unsubscribe();
     this.accountSubscription$.unsubscribe();
     this.contactMediaSubscription$.unsubscribe();
     this.callPickedSubscription$.unsubscribe();
     this.callDisconnectedSubcription$.unsubscribe();
+    this.callNotRepondedSubscription$.unsubscribe();
     this.peerObject.destroy();
   }
 

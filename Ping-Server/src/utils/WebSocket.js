@@ -57,6 +57,21 @@ class WebSocket {
             }
         });
 
+        socket.on('cancel-call', ({ contactID, account }) => {
+            const socketID = getSocketID(contactID);
+            const caller = account;
+            if (socketID) {
+                global.io.to(socketID).emit('hide-notification', caller);
+            }
+        });
+
+        socket.on('cut-call', ({ contactID }) => {
+            const socketID = getSocketID(contactID);
+            if (socketID) {
+                global.io.to(socketID).emit('not-responded', contactID);
+            }
+        });
+
         socket.on('disconnect', () => {
             console.log(warning("WebSocket connection disconnected"));
             removeUser(socket.id);

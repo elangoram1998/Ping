@@ -1,4 +1,7 @@
 <div *ngIf="notification">
-    <span>Getting call from {{caller.username}}</span>
-    <button (click)="answerCall()">answer</button>
+    <div *ngFor="let caller of callers">
+        <span>Getting call from {{caller.username}}</span>
+        <button (click)="answerCall(caller._id)">answer</button>
+        <button (click)="cutCall(caller._id)">cancel</button>
+    </div>
 </div>

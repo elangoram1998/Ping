@@ -11,30 +11,63 @@ import { SocketService } from 'src/app/services/socket.service';
 })
 export class CallNotificationComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription = new Subscription;
-  notification: boolean = false;
-  caller!: Account;
+  private callSubscription: Subscription = new Subscription;
+  private cancelSubscription: Subscription = new Subscription;
+  notification: boolean = true;
+  callers: Account[] = [];
+  timeout!: any;
 
   constructor(private socketService: SocketService, private router: Router) { }
 
   ngOnInit(): void {
-    this.subscription = this.socketService.gettingCall().subscribe(
+    this.callSubscription = this.socketService.gettingCall().subscribe(
       (caller: Account) => {
         this.notification = true;
-        this.caller = caller;
-        setTimeout(() => {
+        this.callers.push(caller);
+        this.timeout = setTimeout(() => {
           this.notification = false;
-        }, 30000)
+          this.cutCall(caller._id);
+        }, 10000)
+      });
+
+    this.cancelSubscription = this.socketService.hideNotification().subscribe(
+      (caller: Account) => {
+        clearTimeout(this.timeout);
+        this.cancelCall(caller._id);
       }
     )
   }
 
-  answerCall() {
-    this.router.navigate(['videoOraudioCall'], { queryParams: { contactID: this.caller._id, action: 'callAnswered' } })
+  answerCall(callerID: string) {
+    clearTimeout(this.timeout);
+    this.router.navigate(['videoOraudioCall'], { queryParams: { contactID: callerID, action: 'callAnswered' } });
+  }
+
+  cancellAllCalls(exception: string) {
+    this.callers.forEach(caller => {
+      console.log("caller: " + caller);
+      if (caller._id !== exception) {
+        this.cutCall(caller._id);
+      }
+    });
+  }
+
+  cutCall(callerID: string) {
+    clearTimeout(this.timeout);
+    this.socketService.cutCall(callerID);
+    this.cancelCall(callerID);
+  }
+
+  cancelCall(callerID: string) {
+    const index = this.callers.findIndex(caller => caller._id === callerID);
+    if (index != -1) {
+      this.callers.splice(index, 1);
+    }
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.callSubscription.unsubscribe();
+    this.cancelSubscription.unsubscribe();
   }
 
 }

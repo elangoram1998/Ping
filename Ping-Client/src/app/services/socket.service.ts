@@ -48,7 +48,6 @@ export class SocketService implements OnDestroy {
     }
     else {
       const localSocket = localStorage.getItem('socket') || "";
-      //this.socket = JSON.parse(localSocket);
     }
 
     return () => {
@@ -102,10 +101,34 @@ export class SocketService implements OnDestroy {
     this.socket.emit('disconnect-call', { contactID, peerID });
   }
 
+  cancelMediaCall(contactID: string, account: Account) {
+    this.socket.emit('cancel-call', { contactID, account });
+  }
+
+  cutCall(contactID: string) {
+    this.socket.emit('cut-call', { contactID });
+  }
+
   gettingCall() {
     return Observable.create((observer: any) => {
       this.socket.on('getting-call', (caller: Account) => {
         observer.next(caller);
+      });
+    });
+  }
+
+  hideNotification() {
+    return Observable.create((observer: any) => {
+      this.socket.on('hide-notification', (caller: Account) => {
+        observer.next(caller);
+      });
+    });
+  }
+
+  notResponded() {
+    return Observable.create((observer: any) => {
+      this.socket.on('not-responded', (contactID: string) => {
+        observer.next(contactID);
       });
     });
   }

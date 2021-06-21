@@ -10,6 +10,7 @@ import { MaterialModule } from '../material/material.module';
 import { ContactsEffects } from '../home/effects/contacts.effects';
 import { MessagesComponent } from './component/messages/messages.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
+    SharedModule,
     RouterModule.forChild(routes),
     StoreModule.forFeature(fromMessages.messagesFeatureKey, fromMessages.messageReducer, { metaReducers: fromMessages.metaReducers }),
     EffectsModule.forFeature([MessagesEffects, ContactsEffects])

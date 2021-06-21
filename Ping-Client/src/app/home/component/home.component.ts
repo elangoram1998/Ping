@@ -9,7 +9,6 @@ import { Contact } from 'src/app/interfaces/contact';
 import { Search } from 'src/app/interfaces/search';
 import { AppState } from 'src/app/reducers';
 import { HomeService } from 'src/app/services/home.service';
-import { PeerService } from 'src/app/services/peer.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { selectAllContacts } from '../selectors/contacts.selectors';
 

@@ -8,7 +8,6 @@ import { selectContact } from 'src/app/home/selectors/contacts.selectors';
 import { Account } from 'src/app/interfaces/account';
 import { Contact } from 'src/app/interfaces/contact';
 import { AppState } from 'src/app/reducers';
-import { PeerService } from 'src/app/services/peer.service';
 import { SocketService } from 'src/app/services/socket.service';
 
 @Component({

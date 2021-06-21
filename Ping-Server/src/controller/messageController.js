@@ -48,9 +48,25 @@ const checkOnline = async (req, res, next) => {
     res.status(HttpStatusCode.OK).send(false);
 }
 
+const updateMessageHeight = async (req, res, next) => {
+    const roomID = req.query.roomID;
+    const message = req.body.message;
+    const chatRoom = await ChatRoom.findOne({ roomID }).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    chatRoom.messages[message.messageCount - 1].messageHeight = message.messageCount;
+    await chatRoom.save().catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });;
+    res.status(HttpStatusCode.OK).send();
+}
+
 module.exports = {
     loadMessages,
     storeSocketID,
     removeSocketID,
-    checkOnline
+    checkOnline,
+    updateMessageHeight
 }

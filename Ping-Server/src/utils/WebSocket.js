@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const ChatRoom = require('../model/chatRoomCollection');
-const chatRoom = require('../model/chatRoomCollection');
 const Message = require('../model/messageCollection');
+const Contact = require('../model/contactsCollection');
 const { removeUser, getSocketID } = require('./users');
 const { sendMessage } = require('./realTimeData');
 
@@ -26,6 +26,9 @@ class WebSocket {
                 await message.save();
                 chatRoom.messages.push(message._id);
                 await chatRoom.save();
+                const contact = await Contact.findOne({ roomID });
+                contact.totalMessageCount++;
+                await contact.save();
                 const messagePopulated = await message.populate('owner_id').execPopulate();
                 sendMessage(contactID, roomID, messagePopulated);
                 callback({ message: messagePopulated, roomID });

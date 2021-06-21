@@ -7,7 +7,9 @@
                 <img class="mt-3" [src]="contact?.contactID?.avatar" width="65" height="65">
                 <span class="mb-2">{{contact?.contactID?.username}}</span>
             </mat-toolbar>
-            <app-messages></app-messages>
+            <app-messages [roomID]="roomID" [contactID]="contactID" [messages]="messages" [chatRoom]="myChatRoom"
+                [contact]="contact">
+            </app-messages>
             <div>
                 <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
                     <mat-form-field>

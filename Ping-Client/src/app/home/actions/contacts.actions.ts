@@ -1,3 +1,4 @@
+import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
 import { Contact } from 'src/app/interfaces/contact';
 
@@ -13,6 +14,16 @@ export const allContactsLoaded = createAction(
 export const contactAdded = createAction(
   '[New Contact Added] Contact Added',
   props<{ contact: Contact }>()
+);
+
+export const updateMessageCount = createAction(
+  '[Message Count] Message Count Updated',
+  props<{ update: Update<Contact> }>()
+);
+
+export const updateMessageState = createAction(
+  '[Message Count] Message Count Updated',
+  props<{ update: Update<Contact> }>()
 );
 
 

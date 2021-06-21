@@ -1,3 +1,19 @@
 <div #chatContainer class="scroll-container">
-    
+    <div #item *ngFor="let message of messages">
+        <div class="friend-message" *ngIf="message.owner_id._id!==account._id;else myMessage">
+            <p><b>{{message.owner_id.username}}</b></p>
+            <p class="letters">
+                {{message.message}}
+            </p>
+            <p class="msg-time"><small>{{message.createdAt | date:'h:mm a'}}</small></p>
+        </div>
+        <ng-template #myMessage>
+            <div class="my-message">
+                <p class="letters">
+                    {{message.message}}
+                </p>
+                <p class="msg-time"><small>{{message.createdAt | date:'h:mm a'}}</small></p>
+            </div>
+        </ng-template>
+    </div>
 </div>

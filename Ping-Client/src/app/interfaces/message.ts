@@ -8,5 +8,5 @@ export interface Message {
     messageCount: number,
     state: string,
     messageHeight: number,
-    created_At: Date
+    createdAt: Date
 }

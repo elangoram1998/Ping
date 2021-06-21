@@ -18,3 +18,8 @@ export const selectChatRoom = createSelector(
     selectAllMsgCollection,
     (chats: any[], props: { roomID: string }) => chats.find(chats => chats.roomID === props.roomID)
 );
+
+export const selectMessages = createSelector(
+    selectAllMsgCollection,
+    (chats: MessageCollection[], props: { roomID: string }) => chats.find(chats => chats.roomID === props.roomID)?.messages
+);

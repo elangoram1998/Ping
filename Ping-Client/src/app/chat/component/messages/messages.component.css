@@ -4,3 +4,31 @@
     overflow-y: scroll;
     background-color: white;
 }
+
+p.letters {
+    word-wrap: break-word;
+}
+
+.friend-message {
+    background-color: white;
+    padding: 10px;
+    border-radius: 15px;
+    text-align: left;
+    width: 80%;
+    border-bottom-left-radius: 0;
+}
+
+.my-message {
+    background-color: #2CF6C9;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+    text-align: right;
+    border-bottom-right-radius: 0;
+    margin-left: 150px;
+}
+
+.msg-time {
+    text-align: right;
+    margin-bottom: 0;
+}

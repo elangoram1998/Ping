@@ -4,6 +4,6 @@ export interface MessageCollection {
     roomID: string,
     currectSclHeight: number,
     totalScrollHeight: number,
-    messages: [Message],
+    messages: Message[],
     areMessagesLoaded: boolean
 }

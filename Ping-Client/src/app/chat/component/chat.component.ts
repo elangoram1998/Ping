@@ -7,8 +7,11 @@ import { selectAccount } from 'src/app/auth/selectors/account.selectors';
 import { selectContact } from 'src/app/home/selectors/contacts.selectors';
 import { Account } from 'src/app/interfaces/account';
 import { Contact } from 'src/app/interfaces/contact';
+import { Message } from 'src/app/interfaces/message';
+import { MessageCollection } from 'src/app/interfaces/message-collection';
 import { AppState } from 'src/app/reducers';
 import { SocketService } from 'src/app/services/socket.service';
+import { selectChatRoom, selectMessages } from '../selectors/messages.selectors';
 
 @Component({
   selector: 'app-chat',
@@ -24,6 +27,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   contactID: string = "";
   contact!: Contact | undefined;
   contactSubscription!: Subscription;
+  messages: Message[] = [];
+  messagesSubscription!: Subscription;
+  chatRoomSubscription!: Subscription;
+  myChatRoom!: MessageCollection;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -56,6 +63,16 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.contact = contact;
       }
     );
+    this.chatRoomSubscription = this.store.pipe(select(selectChatRoom, { roomID: this.roomID })).subscribe(
+      chatRoom => {
+        this.myChatRoom = { ...chatRoom };
+      }
+    );
+    this.messagesSubscription = this.store.pipe(select(selectMessages, { roomID: this.roomID })).subscribe(
+      messages => {
+        this.messages = messages || [];
+      }
+    );
   }
 
   sendMessage() {
@@ -85,5 +102,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.accountSubscription.unsubscribe();
     this.contactSubscription.unsubscribe();
+    this.messagesSubscription.unsubscribe();
+    this.chatRoomSubscription.unsubscribe();
   }
 }

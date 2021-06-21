@@ -16,7 +16,8 @@ export const environment = {
   loadMyMessages: 'http://localhost:3000/api/message/loadMessages',
   storeSocketID: 'http://localhost:3000/api/message/storeSocketID',
   removeSocketID: 'http://localhost:3000/api/message/removeSocketID',
-  checkOnline: 'http://localhost:3000/api/message/checkOnline'
+  checkOnline: 'http://localhost:3000/api/message/checkOnline',
+  updateMessageHeight: 'http://localhost:3000/api/message/updateMsgHeight'
 };
 
 /*

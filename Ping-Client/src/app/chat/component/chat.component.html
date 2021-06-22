@@ -6,6 +6,9 @@
             <mat-toolbar>
                 <img class="mt-3" [src]="contact?.contactID?.avatar" width="65" height="65">
                 <span class="mb-2">{{contact?.contactID?.username}}</span>
+                <button type="button" mat-raised-button matSuffix (click)="mediaCall()">
+                    call
+                </button>
             </mat-toolbar>
             <app-messages [roomID]="roomID" [contactID]="contactID" [messages]="messages" [chatRoom]="myChatRoom"
                 [contact]="contact">
@@ -16,9 +19,6 @@
                         <input matInput formControlName="message" type="text" placeholder="Type message..">
                         <button type="submit" mat-raised-button matSuffix [disabled]="messageForm.invalid">
                             send
-                        </button>
-                        <button (click)="mediaCall()">
-                            call
                         </button>
                     </mat-form-field>
                 </form>

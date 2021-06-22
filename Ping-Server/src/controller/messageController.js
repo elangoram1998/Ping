@@ -1,6 +1,7 @@
 const logger = require('../utils/logger');
 const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
+const Message = require('../model/messageCollection');
 const { addUser, getSocketID, getUser, removeUser } = require('../utils/users');
 
 const loadMessages = async (req, res, next) => {
@@ -21,6 +22,7 @@ const loadMessages = async (req, res, next) => {
 const storeSocketID = async (req, res, next) => {
     const socketID = req.body.socketID;
     const userID = req.body.userID;
+    logger(`storing socketID ${socketID}`);
     const { error, user } = addUser({ socketID, userID });
     if (error) {
         error.statusCode = HttpStatusCode.NOT_FOUND;
@@ -31,6 +33,7 @@ const storeSocketID = async (req, res, next) => {
 
 const removeSocketID = async (req, res, next) => {
     const socketID = req.body.socketID;
+    logger(`removing socketID ${socketID}`);
     const { users, error } = removeUser(socketID);
     if (error) {
         error.statusCode = HttpStatusCode.NOT_FOUND;
@@ -41,6 +44,7 @@ const removeSocketID = async (req, res, next) => {
 
 const checkOnline = async (req, res, next) => {
     const contactID = req.query.contactID;
+    logger(`chekcing is ${contactID} online now`);
     const user = getUser(contactID);
     if (user) {
         return res.status(HttpStatusCode.OK).send(true);
@@ -51,16 +55,23 @@ const checkOnline = async (req, res, next) => {
 const updateMessageHeight = async (req, res, next) => {
     const roomID = req.query.roomID;
     const message = req.body.message;
-    const chatRoom = await ChatRoom.findOne({ roomID }).catch((error) => {
+    logger(`Updating message height`);
+    const messageData = await Message.findById({ _id: message._id }).catch((error) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
         next(error);
     });
-    chatRoom.messages[message.messageCount - 1].messageHeight = message.messageCount;
-    await chatRoom.save().catch((error) => {
-        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
-        next(error);
-    });;
+    if (messageData.messageHeight == 0) {
+        messageData.messageHeight = message.messageHeight;
+        await messageData.save().catch((error) => {
+            error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+            next(error);
+        });
+    }
     res.status(HttpStatusCode.OK).send();
+}
+
+const updateMessageState = async (req, res, next) => {
+
 }
 
 module.exports = {
@@ -68,5 +79,6 @@ module.exports = {
     storeSocketID,
     removeSocketID,
     checkOnline,
-    updateMessageHeight
+    updateMessageHeight,
+    updateMessageState
 }

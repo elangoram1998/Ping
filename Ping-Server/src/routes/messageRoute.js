@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const { loadMessages, storeSocketID, removeSocketID, checkOnline, updateMessageHeight } = require('../controller/messageController');
+const { loadMessages, storeSocketID, removeSocketID, checkOnline, updateMessageHeight, updateMessageState } = require('../controller/messageController');
 
 const router = express.Router();
 
@@ -12,5 +12,6 @@ router
     .post('/removeSocketID', removeSocketID)
     .get('/checkOnline', checkOnline)
     .post('/updateMsgHeight', updateMessageHeight)
+    .post('/updateMsgState', updateMessageState)
 
 module.exports = router;

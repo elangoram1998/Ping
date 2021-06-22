@@ -38,8 +38,6 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   constructor(private store: Store<AppState>, private messageService: MessageService) { }
 
   ngOnChanges(): void {
-    this.updatedMessages = Object.assign(this.updatedMessages, this.messages);
-    this.messagesCount = this.updatedMessages.length;
     this.updatedContact = Object.assign({}, this.contact);
   }
 
@@ -60,7 +58,6 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
 
   ngAfterViewInit(): void {
     this.itemElement.changes.subscribe(_ => {
-      console.log("change message");
       if (this.messagesCount < this.messages.length) {
         console.log(this.itemElement);
         this.updatedMessages = Object.assign(this.updatedMessages, this.messages);

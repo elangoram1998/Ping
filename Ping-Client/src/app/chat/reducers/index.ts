@@ -6,7 +6,7 @@ import {
 } from '@ngrx/store';
 import { MessageCollection } from 'src/app/interfaces/message-collection';
 import { environment } from '../../../environments/environment';
-import { insertMessage, MessagesLoaded, updateMsgHeight } from '../actions/messages.actions';
+import { insertMessage, MessagesLoaded, updateMsgHeight, updateMsgState } from '../actions/messages.actions';
 
 export const messagesFeatureKey = 'messages';
 
@@ -24,7 +24,8 @@ export const messageReducer = createReducer(
   initialState,
   on(MessagesLoaded, (state, action) => adapter.addOne(action.messageCollection, state)),
   on(insertMessage, (state, action) => adapter.updateOne(action.update, state)),
-  on(updateMsgHeight, (state, action) => adapter.updateOne(action.update, state))
+  on(updateMsgHeight, (state, action) => adapter.updateOne(action.update, state)),
+  on(updateMsgState, (state, action) => adapter.updateOne(action.update, state))
 );
 
 export const { selectAll } = adapter.getSelectors();

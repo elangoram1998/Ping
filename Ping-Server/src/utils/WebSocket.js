@@ -4,6 +4,7 @@ const Message = require('../model/messageCollection');
 const Contact = require('../model/contactsCollection');
 const { removeUser, getSocketID } = require('./users');
 const { sendMessage } = require('./realTimeData');
+const { updateTotalMessageCount } = require('./utils');
 
 const errorMsg = chalk.underline.red.bold;
 const success = chalk.underline.green.bold;
@@ -26,9 +27,7 @@ class WebSocket {
                 await message.save();
                 chatRoom.messages.push(message._id);
                 await chatRoom.save();
-                const contact = await Contact.findOne({ roomID });
-                contact.totalMessageCount++;
-                await contact.save();
+                updateTotalMessageCount(roomID);
                 const messagePopulated = await message.populate('owner_id').execPopulate();
                 sendMessage(contactID, roomID, messagePopulated);
                 callback({ message: messagePopulated, roomID });

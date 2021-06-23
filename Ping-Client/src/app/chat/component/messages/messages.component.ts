@@ -4,7 +4,7 @@ import { select, Store } from '@ngrx/store';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { selectAccount } from 'src/app/auth/selectors/account.selectors';
-import { updateMessageCount } from 'src/app/home/actions/contacts.actions';
+import { updateMessageCount, updateMessageState } from 'src/app/home/actions/contacts.actions';
 import { Account } from 'src/app/interfaces/account';
 import { Contact } from 'src/app/interfaces/contact';
 import { Message } from 'src/app/interfaces/message';
@@ -107,6 +107,15 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     this.store.dispatch(updateMsgHeight({ update }));
   }
 
+  updateMessageState() {
+    this.chatRoom.messages = Object.assign([], this.updatedMessages);
+    const update: Update<MessageCollection> = {
+      id: this.roomID,
+      changes: this.chatRoom
+    }
+    this.store.dispatch(updateMessageState({ update }));
+  }
+
   updateMessageCount() {
     this.updatedContact.totalMessageCount++;
     const update: Update<Contact> = {
@@ -117,7 +126,28 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   }
 
   markAsRead() {
-
+    let messagesInInterval = [];
+    const start = this.contact?.readMessageCount || 0;
+    let end = 0;
+    for (var i = start; i < this.messagesCount; i++) {
+      if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight) {
+        if (this.updatedMessages[i].owner_id._id !== this.account._id) {
+          messagesInInterval.push(this.updatedMessages[i]);
+          end = i;
+        }
+      }
+      else {
+        break;
+      }
+    }
+    if (end >= start) {
+      this.updatedMessages = Object.assign(this.updatedMessages, this.messages);
+      for (var i = start; i <= end; i++) {
+        this.updatedMessages[i].state = 'read';
+      }
+      this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID, this.updatedMessages).subscribe(console.log);
+      this.updateMessageState();
+    }
   }
 
   ngOnDestroy() {

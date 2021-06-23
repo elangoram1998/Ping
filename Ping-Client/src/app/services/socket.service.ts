@@ -9,6 +9,7 @@ import { environment } from 'src/environments/environment';
 import { selectAccount } from '../auth/selectors/account.selectors';
 import { insertMessage } from '../chat/actions/messages.actions';
 import { selectChatRoom } from '../chat/selectors/messages.selectors';
+import { updateMessageCount } from '../home/actions/contacts.actions';
 import { Account } from '../interfaces/account';
 import { Message } from '../interfaces/message';
 import { MessageCollection } from '../interfaces/message-collection';
@@ -44,6 +45,9 @@ export class SocketService implements OnDestroy {
       });
       this.socket.on('message', (payload: { message: Message, roomID: string }) => {
         this.updateMessageCollection(payload.message, payload.roomID);
+      });
+      this.socket.on('updateMsgState', (payload: { roomID: string, updatedMsg: Message[] }) => {
+        this.updateMessageState(payload.updatedMsg, payload.roomID);
       });
     }
     else {
@@ -86,6 +90,23 @@ export class SocketService implements OnDestroy {
       changes: myChatRoom
     }
     this.store.dispatch(insertMessage({ update }));
+    chatRoomSubscription.unsubscribe();
+  }
+
+  updateMessageState(messages: Message[], roomID: string) {
+    let myChatRoom!: MessageCollection;
+    let chatRoomSubscription: Subscription = this.store.pipe(select(selectChatRoom, { roomID })).subscribe(
+      chatRoom => {
+        myChatRoom = { ...chatRoom };
+      }
+    );
+    myChatRoom.messages = Object.assign([], myChatRoom.messages);
+    myChatRoom.messages = messages;
+    const update: Update<MessageCollection> = {
+      id: roomID,
+      changes: myChatRoom
+    }
+    this.store.dispatch(updateMessageCount({ update }));
     chatRoomSubscription.unsubscribe();
   }
 

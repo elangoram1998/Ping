@@ -3,6 +3,7 @@ const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
 const Message = require('../model/messageCollection');
 const { addUser, getSocketID, getUser, removeUser } = require('../utils/users');
+const { updateState } = require('../utils/realTimeData');
 
 const loadMessages = async (req, res, next) => {
     const roomID = req.query.roomID;
@@ -71,7 +72,27 @@ const updateMessageHeight = async (req, res, next) => {
 }
 
 const updateMessageState = async (req, res, next) => {
-
+    const roomID = req.query.roomID;
+    const contactID = req.query.contactID;
+    const messages = req.body.messages;
+    const updatedMsg = req.body.updatedMsg;
+    await Message.updateMany(
+        {
+            _id: {
+                $in: messages
+            },
+            $set: {
+                state: 'read'
+            }
+        }
+    ).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    updateState(contactID, roomID, updatedMsg);
+    res.status(HttpStatusCode.OK).json({
+        'success': 'Message state updated successfully'
+    });
 }
 
 module.exports = {

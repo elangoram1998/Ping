@@ -22,6 +22,11 @@ export const updateMsgHeight = createAction(
   props<{ update: Update<MessageCollection> }>()
 );
 
+export const updateMsgState = createAction(
+  '[Message State] Update Message State',
+  props<{ update: Update<MessageCollection> }>()
+);
+
 
 
 

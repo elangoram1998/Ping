@@ -68,14 +68,14 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
         console.log("children size: " + this.chatContainer.nativeElement.children.length);
         let msgTopHeight = 0;
         if (childrenSize > 1) {
-          msgTopHeight = children[childrenSize - 1].offsetTop + children[childrenSize - 1].clientHeight;
+          msgTopHeight = (children[childrenSize - 1].offsetTop - 64) + (children[childrenSize - 1].clientHeight + 10);
           console.log(children)
           console.log("message height: " + msgTopHeight);
           this.updatedMessages[childrenSize - 1] = Object.assign({}, this.updatedMessages[childrenSize - 1]);
           this.updatedMessages[childrenSize - 1].messageHeight = msgTopHeight;
         }
         else if (childrenSize == 1 && childrenSize > 0) {
-          msgTopHeight = children[0].clientHeight;
+          msgTopHeight = children[0].clientHeight + 10;
           console.log("message height: " + msgTopHeight);
           this.updatedMessages[0] = Object.assign({}, this.updatedMessages[0]);
           this.updatedMessages[0].messageHeight = msgTopHeight;
@@ -90,6 +90,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
       map((element: Event) => element.target),
       debounceTime(300)
     ).subscribe((event: any) => {
+      console.log("scroll event");
       console.log(event.scrollTop);
       if (event.scrollTop + 610 > this.currentScrollHeight) {
         this.currentScrollHeight = event.scrollTop + 610;
@@ -129,9 +130,12 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     let messagesInInterval = [];
     const start = this.contact?.readMessageCount || 0;
     let end = 0;
+    console.log("inside mark as read");
     for (var i = start; i < this.messagesCount; i++) {
       if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight) {
+        console.log("inside first if loop");
         if (this.updatedMessages[i].owner_id._id !== this.account._id) {
+          console.log("inside contact message");
           messagesInInterval.push(this.updatedMessages[i]);
           end = i;
         }
@@ -141,8 +145,11 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
       }
     }
     if (end >= start) {
-      this.updatedMessages = Object.assign(this.updatedMessages, this.messages);
+      console.log("update state");
+      console.log(messagesInInterval);
       for (var i = start; i <= end; i++) {
+        this.updatedMessages[i] = Object.assign({}, this.updatedMessages[i]);
+        console.log("inside state chanhe for loop");
         this.updatedMessages[i].state = 'read';
       }
       this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID, this.updatedMessages).subscribe(console.log);

@@ -94,6 +94,7 @@ export class SocketService implements OnDestroy {
   }
 
   updateMessageState(messages: Message[], roomID: string) {
+    console.log("in service - update message state")
     let myChatRoom!: MessageCollection;
     let chatRoomSubscription: Subscription = this.store.pipe(select(selectChatRoom, { roomID })).subscribe(
       chatRoom => {

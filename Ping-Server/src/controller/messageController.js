@@ -76,6 +76,7 @@ const updateMessageState = async (req, res, next) => {
     const contactID = req.query.contactID;
     const messages = req.body.messages;
     const updatedMsg = req.body.updatedMsg;
+    console.log(messages);
     await Message.updateMany(
         {
             _id: {

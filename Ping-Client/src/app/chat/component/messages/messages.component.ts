@@ -119,8 +119,10 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   }
 
   updateMessageState() {
+    console.log(this.chatRoom);
     let updatedChatRoom: MessageCollection = { ...this.chatRoom };
     updatedChatRoom.messages = Object.assign([], this.updatedMessages);
+    console.log(updatedChatRoom);
     const update: Update<MessageCollection> = {
       id: this.roomID,
       changes: updatedChatRoom
@@ -174,6 +176,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
         console.log("inside state chanhe for loop");
         this.updatedMessages[i].state = 'read';
       }
+      console.log(this.updatedMessages);
       this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID, this.updatedMessages).subscribe(console.log);
       this.updateMessageState();
     }

@@ -22,7 +22,7 @@ export const updateMessageCount = createAction(
 );
 
 export const updateMessageState = createAction(
-  '[Message Count] Message Count Updated',
+  '[Message State] Message State Updated',
   props<{ update: Update<Contact> }>()
 );
 

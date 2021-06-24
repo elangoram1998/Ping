@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
@@ -80,14 +81,20 @@ const updateMessageState = async (req, res, next) => {
     const messageSize = messages.length;
     logger(`Updating message state`);
     console.log(messages);
-    // messages.forEach(message => {
-
-    // });
+    let messageIDS = [];
+    messages.forEach(message => {
+        let ID = mongoose.Types.ObjectId(message._id);
+        messageIDS.push(ID);
+    });
+    console.log("message ids");
+    console.log(messageIDS);
     await Message.updateMany(
         {
             _id: {
-                $in: messages
-            },
+                $in: messageIDS
+            }
+        },
+        {
             $set: {
                 state: 'read'
             }

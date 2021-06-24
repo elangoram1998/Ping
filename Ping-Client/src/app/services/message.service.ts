@@ -34,4 +34,11 @@ export class MessageService {
       catchError(handleError)
     );
   }
+
+  updateScrollHeight(roomID: string, currectSclHeight: number, totalScrollHeight: number) {
+    let params = new HttpParams().set('roomID', roomID);
+    return this.http.patch(environment.updateScrollHeight, { currectSclHeight, totalScrollHeight }, { params }).pipe(
+      catchError(handleError)
+    );
+  }
 }

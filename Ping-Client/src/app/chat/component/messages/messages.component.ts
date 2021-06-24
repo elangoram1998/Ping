@@ -11,7 +11,7 @@ import { Message } from 'src/app/interfaces/message';
 import { MessageCollection } from 'src/app/interfaces/message-collection';
 import { AppState } from 'src/app/reducers';
 import { MessageService } from 'src/app/services/message.service';
-import { updateMsgHeight } from '../../actions/messages.actions';
+import { updateMsgHeight, updateScrollHeight } from '../../actions/messages.actions';
 import { selectMessages } from '../../selectors/messages.selectors';
 
 @Component({
@@ -45,6 +45,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     this.updatedMessages = Object.assign(this.updatedMessages, this.messages);
     this.messagesCount = this.updatedMessages.length;
     this.updatedContact = Object.assign({}, this.contact);
+    this.currentScrollHeight = this.chatRoom.currectSclHeight;
     this.load();
   }
 
@@ -83,6 +84,11 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
         console.log(this.updatedMessages);
         this.updateMessageHeight();
         this.updateMessageCount();
+        if (this.chatContainer.nativeElement.scrollHeight <= 610) {
+          this.currentScrollHeight = this.updatedMessages[childrenSize - 1].messageHeight;
+          this.updateScrollHeight(this.currentScrollHeight, this.chatContainer.nativeElement.scrollHeight);
+          this.markAsRead();
+        }
       }
     });
 
@@ -92,9 +98,13 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     ).subscribe((event: any) => {
       console.log("scroll event");
       console.log(event.scrollTop);
+      console.log(this.currentScrollHeight);
       if (event.scrollTop + 610 > this.currentScrollHeight) {
+        console.log("start the scoll event");
         this.currentScrollHeight = event.scrollTop + 610;
+        console.log(this.currentScrollHeight);
         this.markAsRead();
+        this.updateScrollHeight(this.currentScrollHeight, this.chatContainer.nativeElement.scrollHeight);
       }
     });
   }
@@ -109,12 +119,24 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   }
 
   updateMessageState() {
-    this.chatRoom.messages = Object.assign([], this.updatedMessages);
+    let updatedChatRoom: MessageCollection = { ...this.chatRoom };
+    updatedChatRoom.messages = Object.assign([], this.updatedMessages);
+    const update: Update<MessageCollection> = {
+      id: this.roomID,
+      changes: updatedChatRoom
+    }
+    this.store.dispatch(updateMessageState({ update }));
+  }
+
+  updateScrollHeight(currentScrollHeight: number, totalScrollHeight: number) {
+    this.chatRoom = Object.assign({}, this.chatRoom);
+    this.chatRoom.currectSclHeight = currentScrollHeight;
+    this.chatRoom.totalScrollHeight = totalScrollHeight;
     const update: Update<MessageCollection> = {
       id: this.roomID,
       changes: this.chatRoom
     }
-    this.store.dispatch(updateMessageState({ update }));
+    this.store.dispatch(updateScrollHeight({ update }));
   }
 
   updateMessageCount() {
@@ -144,7 +166,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
         break;
       }
     }
-    if (end >= start) {
+    if (messagesInInterval.length > 0) {
       console.log("update state");
       console.log(messagesInInterval);
       for (var i = start; i <= end; i++) {

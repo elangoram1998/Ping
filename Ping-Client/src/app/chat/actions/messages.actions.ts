@@ -27,6 +27,11 @@ export const updateMsgState = createAction(
   props<{ update: Update<MessageCollection> }>()
 );
 
+export const updateScrollHeight = createAction(
+  '[Scroll Height] Update Scroll Height',
+  props<{ update: Update<MessageCollection> }>()
+);
+
 
 
 

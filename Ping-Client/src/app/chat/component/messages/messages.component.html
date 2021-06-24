@@ -11,7 +11,12 @@
                 <p class="letters test">
                     {{message.message}}
                 </p>
-                <p class="msg-time"><small>{{message.createdAt | date:'h:mm a'}}</small></p>
+                <p class="msg-time">
+                    <small>{{message.createdAt | date:'h:mm a'}}</small>
+                    <small *ngIf="message.state==='read'">
+                        <mat-icon color="primary">done_all</mat-icon>
+                    </small>
+                </p>
             </div>
         </ng-template>
     </div>

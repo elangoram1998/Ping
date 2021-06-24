@@ -2,6 +2,7 @@ const logger = require('../utils/logger');
 const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
 const Message = require('../model/messageCollection');
+const Contact = require('../model/contactsCollection');
 const { addUser, getSocketID, getUser, removeUser } = require('../utils/users');
 const { updateState } = require('../utils/realTimeData');
 
@@ -76,7 +77,12 @@ const updateMessageState = async (req, res, next) => {
     const contactID = req.query.contactID;
     const messages = req.body.messages;
     const updatedMsg = req.body.updatedMsg;
+    const messageSize = messages.length;
+    logger(`Updating message state`);
     console.log(messages);
+    // messages.forEach(message => {
+
+    // });
     await Message.updateMany(
         {
             _id: {
@@ -90,9 +96,46 @@ const updateMessageState = async (req, res, next) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
         next(error);
     });
+    await Contact.findOneAndUpdate(
+        {
+            myID: req.account._id
+        },
+        {
+            $set: {
+                readMessageCount: messages[messageSize - 1].messageCount
+            }
+        }
+    ).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
     updateState(contactID, roomID, updatedMsg);
     res.status(HttpStatusCode.OK).json({
         'success': 'Message state updated successfully'
+    });
+}
+
+const updateScrollHeight = async (req, res, next) => {
+    const roomID = req.query.roomID;
+    const currectSclHeight = req.body.currectSclHeight;
+    const totalScrollHeight = req.body.totalScrollHeight;
+    logger(`Updating scroll height`);
+    await ChatRoom.findOneAndUpdate(
+        {
+            roomID
+        },
+        {
+            $set: {
+                currectSclHeight,
+                totalScrollHeight
+            }
+        }
+    ).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    res.status(HttpStatusCode.OK).json({
+        'success': 'Scroll height updated successfully'
     });
 }
 
@@ -102,5 +145,6 @@ module.exports = {
     removeSocketID,
     checkOnline,
     updateMessageHeight,
-    updateMessageState
+    updateMessageState,
+    updateScrollHeight
 }

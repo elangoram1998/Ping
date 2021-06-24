@@ -18,7 +18,8 @@ export const environment = {
   removeSocketID: 'http://localhost:3000/api/message/removeSocketID',
   checkOnline: 'http://localhost:3000/api/message/checkOnline',
   updateMessageHeight: 'http://localhost:3000/api/message/updateMsgHeight',
-  updateMessageState: 'http://localhost:3000/api/message/updateMsgState'
+  updateMessageState: 'http://localhost:3000/api/message/updateMsgState',
+  updateScrollHeight: 'http://localhost:3000/api/message/updateScrollHeight'
 };
 
 /*

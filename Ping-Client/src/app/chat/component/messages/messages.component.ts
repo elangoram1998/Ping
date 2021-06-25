@@ -39,6 +39,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
 
   ngOnChanges(): void {
     this.updatedContact = Object.assign({}, this.contact);
+    this.currentScrollHeight = this.chatRoom.currectSclHeight;
   }
 
   ngOnInit(): void {
@@ -60,7 +61,6 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   ngAfterViewInit(): void {
     this.itemElement.changes.subscribe(_ => {
       if (this.messagesCount < this.messages.length) {
-        console.log(this.itemElement);
         this.updatedMessages = Object.assign(this.updatedMessages, this.messages);
         this.messagesCount = this.updatedMessages.length;
         console.log("size of messages: " + this.itemElement.length);
@@ -70,7 +70,6 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
         let msgTopHeight = 0;
         if (childrenSize > 1) {
           msgTopHeight = (children[childrenSize - 1].offsetTop - 64) + (children[childrenSize - 1].clientHeight + 10);
-          console.log(children)
           console.log("message height: " + msgTopHeight);
           this.updatedMessages[childrenSize - 1] = Object.assign({}, this.updatedMessages[childrenSize - 1]);
           this.updatedMessages[childrenSize - 1].messageHeight = msgTopHeight;
@@ -81,7 +80,6 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
           this.updatedMessages[0] = Object.assign({}, this.updatedMessages[0]);
           this.updatedMessages[0].messageHeight = msgTopHeight;
         }
-        console.log(this.updatedMessages);
         this.updateMessageHeight();
         this.updateMessageCount();
         if (this.chatContainer.nativeElement.scrollHeight <= 610) {
@@ -102,7 +100,6 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
       if (event.scrollTop + 610 > this.currentScrollHeight) {
         console.log("start the scoll event");
         this.currentScrollHeight = event.scrollTop + 610;
-        console.log(this.currentScrollHeight);
         this.markAsRead();
         this.updateScrollHeight(this.currentScrollHeight, this.chatContainer.nativeElement.scrollHeight);
       }
@@ -119,10 +116,8 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   }
 
   updateMessageState() {
-    console.log(this.chatRoom);
     let updatedChatRoom: MessageCollection = { ...this.chatRoom };
     updatedChatRoom.messages = Object.assign([], this.updatedMessages);
-    console.log(updatedChatRoom);
     const update: Update<MessageCollection> = {
       id: this.roomID,
       changes: updatedChatRoom
@@ -151,6 +146,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   }
 
   updateReadMessageCount(count: number) {
+    this.updatedContact = Object.assign({}, this.updatedContact);
     this.updatedContact.readMessageCount = count;
     const update: Update<Contact> = {
       id: this.roomID,
@@ -160,14 +156,12 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   }
 
   markAsRead() {
-    let messagesInInterval = [];
+    let messagesInInterval: Message[] = [];
     const start = this.contact?.readMessageCount || 0;
     console.log("start count: " + start);
     let end = 0;
-    console.log("inside mark as read");
     for (var i = start; i < this.messagesCount; i++) {
       if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight + 6) {
-        console.log("inside first if loop");
         if (this.updatedMessages[i].owner_id._id !== this.account._id) {
           console.log("inside contact message");
           messagesInInterval.push(this.updatedMessages[i]);
@@ -179,15 +173,15 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
       }
     }
     if (messagesInInterval.length > 0) {
+      messagesInInterval = [];
       console.log("update state");
-      console.log(messagesInInterval);
       for (var i = start; i <= end; i++) {
         this.updatedMessages[i] = Object.assign({}, this.updatedMessages[i]);
-        console.log("inside state chanhe for loop");
+        console.log("inside state change for loop");
         this.updatedMessages[i].state = 'read';
+        messagesInInterval.push(this.updatedMessages[i]);
       }
-      console.log(this.updatedMessages);
-      this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID, this.updatedMessages).subscribe(console.log);
+      this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID).subscribe(console.log);
       this.updateMessageState();
       this.updateReadMessageCount(this.updatedMessages[end].messageCount);
     }

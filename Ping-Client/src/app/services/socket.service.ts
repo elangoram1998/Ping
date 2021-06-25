@@ -94,16 +94,17 @@ export class SocketService implements OnDestroy {
   }
 
   updateMessageState(messages: Message[], roomID: string) {
-    console.log("in service - update message state")
+    console.log("In service - update message state")
     let myChatRoom!: MessageCollection;
     let chatRoomSubscription: Subscription = this.store.pipe(select(selectChatRoom, { roomID })).subscribe(
       chatRoom => {
         myChatRoom = { ...chatRoom };
       }
     );
-    console.log(messages);
     myChatRoom.messages = Object.assign([], myChatRoom.messages);
-    myChatRoom.messages = messages;
+    messages.forEach(message => {
+      myChatRoom.messages[message.messageCount - 1] = message;
+    });
     console.log(myChatRoom.messages);
     const update: Update<MessageCollection> = {
       id: roomID,

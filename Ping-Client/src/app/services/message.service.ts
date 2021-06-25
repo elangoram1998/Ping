@@ -28,9 +28,9 @@ export class MessageService {
     );
   }
 
-  updateMessageState(roomID: string, messages: Message[], contactID: string, updatedMsg: Message[]) {
+  updateMessageState(roomID: string, messages: Message[], contactID: string) {
     let params = new HttpParams().set('roomID', roomID).set('contactID', contactID);
-    return this.http.patch(environment.updateMessageState, { messages, updatedMsg }, { params }).pipe(
+    return this.http.patch(environment.updateMessageState, { messages }, { params }).pipe(
       catchError(handleError)
     );
   }

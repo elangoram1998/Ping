@@ -77,17 +77,13 @@ const updateMessageState = async (req, res, next) => {
     const roomID = req.query.roomID;
     const contactID = req.query.contactID;
     const messages = req.body.messages;
-    const updatedMsg = req.body.updatedMsg;
     const messageSize = messages.length;
     logger(`Updating message state`);
-    console.log(messages);
     let messageIDS = [];
     messages.forEach(message => {
         let ID = mongoose.Types.ObjectId(message._id);
         messageIDS.push(ID);
     });
-    console.log("message ids");
-    console.log(messageIDS);
     await Message.updateMany(
         {
             _id: {
@@ -116,7 +112,7 @@ const updateMessageState = async (req, res, next) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
         next(error);
     });
-    updateState(contactID, roomID, updatedMsg);
+    updateState(contactID, roomID, messages);
     res.status(HttpStatusCode.OK).json({
         'success': 'Message state updated successfully'
     });

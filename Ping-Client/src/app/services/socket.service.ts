@@ -7,9 +7,9 @@ import { catchError, take } from 'rxjs/operators';
 import { io, Socket } from 'socket.io-client';
 import { environment } from 'src/environments/environment';
 import { selectAccount } from '../auth/selectors/account.selectors';
-import { insertMessage } from '../chat/actions/messages.actions';
+import { insertMessage, updateMessageState } from '../chat/actions/messages.actions';
 import { selectChatRoom } from '../chat/selectors/messages.selectors';
-import { updateMessageCount, updateMessageState } from '../home/actions/contacts.actions';
+import { updateMessageCount } from '../home/actions/contacts.actions';
 import { Account } from '../interfaces/account';
 import { Message } from '../interfaces/message';
 import { MessageCollection } from '../interfaces/message-collection';
@@ -101,8 +101,10 @@ export class SocketService implements OnDestroy {
         myChatRoom = { ...chatRoom };
       }
     );
+    console.log(messages);
     myChatRoom.messages = Object.assign([], myChatRoom.messages);
     myChatRoom.messages = messages;
+    console.log(myChatRoom.messages);
     const update: Update<MessageCollection> = {
       id: roomID,
       changes: myChatRoom

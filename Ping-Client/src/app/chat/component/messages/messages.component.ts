@@ -4,14 +4,14 @@ import { select, Store } from '@ngrx/store';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { selectAccount } from 'src/app/auth/selectors/account.selectors';
-import { updateMessageCount, updateMessageState } from 'src/app/home/actions/contacts.actions';
+import { updateMessageCount, updateReadMsgCount } from 'src/app/home/actions/contacts.actions';
 import { Account } from 'src/app/interfaces/account';
 import { Contact } from 'src/app/interfaces/contact';
 import { Message } from 'src/app/interfaces/message';
 import { MessageCollection } from 'src/app/interfaces/message-collection';
 import { AppState } from 'src/app/reducers';
 import { MessageService } from 'src/app/services/message.service';
-import { updateMsgHeight, updateScrollHeight } from '../../actions/messages.actions';
+import { updateMessageState, updateMsgHeight, updateScrollHeight } from '../../actions/messages.actions';
 import { selectMessages } from '../../selectors/messages.selectors';
 
 @Component({
@@ -150,13 +150,23 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     this.store.dispatch(updateMessageCount({ update }));
   }
 
+  updateReadMessageCount(count: number) {
+    this.updatedContact.readMessageCount = count;
+    const update: Update<Contact> = {
+      id: this.roomID,
+      changes: this.updatedContact
+    }
+    this.store.dispatch(updateReadMsgCount({ update }));
+  }
+
   markAsRead() {
     let messagesInInterval = [];
     const start = this.contact?.readMessageCount || 0;
+    console.log("start count: " + start);
     let end = 0;
     console.log("inside mark as read");
     for (var i = start; i < this.messagesCount; i++) {
-      if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight) {
+      if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight + 6) {
         console.log("inside first if loop");
         if (this.updatedMessages[i].owner_id._id !== this.account._id) {
           console.log("inside contact message");
@@ -179,6 +189,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
       console.log(this.updatedMessages);
       this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID, this.updatedMessages).subscribe(console.log);
       this.updateMessageState();
+      this.updateReadMessageCount(this.updatedMessages[end].messageCount);
     }
   }
 

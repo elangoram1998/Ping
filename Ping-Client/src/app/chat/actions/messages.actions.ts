@@ -22,13 +22,13 @@ export const updateMsgHeight = createAction(
   props<{ update: Update<MessageCollection> }>()
 );
 
-export const updateMsgState = createAction(
-  '[Message State] Update Message State',
+export const updateScrollHeight = createAction(
+  '[Scroll Height] Update Scroll Height',
   props<{ update: Update<MessageCollection> }>()
 );
 
-export const updateScrollHeight = createAction(
-  '[Scroll Height] Update Scroll Height',
+export const updateMessageState = createAction(
+  '[Message State] Message State Updated',
   props<{ update: Update<MessageCollection> }>()
 );
 

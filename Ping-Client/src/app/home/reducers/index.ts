@@ -6,7 +6,7 @@ import {
 } from '@ngrx/store';
 import { Contact } from 'src/app/interfaces/contact';
 import { environment } from '../../../environments/environment';
-import { allContactsLoaded, contactAdded, updateMessageCount, updateMessageState } from '../actions/contacts.actions';
+import { allContactsLoaded, contactAdded, updateMessageCount, updateReadMsgCount } from '../actions/contacts.actions';
 
 export const contactsFeatureKey = 'contacts';
 
@@ -27,7 +27,7 @@ export const contactReducer = createReducer(
   on(allContactsLoaded, (state, action) => adapter.addMany(action.contacts, { ...state, allContactsLoaded: true })),
   on(contactAdded, (state, action) => adapter.addOne(action.contact, state)),
   on(updateMessageCount, (state, action) => adapter.updateOne(action.update, state)),
-  on(updateMessageState, (state, action) => adapter.updateOne(action.update, state))
+  on(updateReadMsgCount, (state, action) => adapter.updateOne(action.update, state))
 );
 
 export const { selectAll } = adapter.getSelectors();

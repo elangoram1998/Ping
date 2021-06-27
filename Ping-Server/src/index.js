@@ -5,6 +5,7 @@ const http = require('http');
 const socketio = require('socket.io');
 
 require('./database/mongoDB');
+require('./utils/peer');
 const { errorMsg, success } = require('./utils/constants');
 const HttpStatusCode = require('./utils/httpStatusCode');
 const WebSocket = require('./utils/WebSocket');

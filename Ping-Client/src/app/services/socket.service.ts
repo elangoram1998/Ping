@@ -29,30 +29,24 @@ export class SocketService implements OnDestroy {
   }
 
   connect() {
-    const isSocketConnected = localStorage.getItem('socket');
-    if (!isSocketConnected) {
-      this.socket = io(environment.server);
+    this.accountSubscription = this.store.pipe(select(selectAccount)).subscribe(
+      account => {
+        this.account = account;
+      });
 
-      this.accountSubscription = this.store.pipe(select(selectAccount)).subscribe(
-        account => {
-          this.account = account;
-        });
+    this.socket = io(environment.server);
 
-      this.socket.on("connect", () => {
-        console.log("Application socket ID: " + this.socket.id);
-        localStorage.setItem('socket', "loaded");
-        this.http.post(environment.storeSocketID, { socketID: this.socket.id, userID: this.account._id }).subscribe(console.log);
-      });
-      this.socket.on('message', (payload: { message: Message, roomID: string }) => {
-        this.updateMessageCollection(payload.message, payload.roomID);
-      });
-      this.socket.on('updateMsgState', (payload: { roomID: string, updatedMsg: Message[] }) => {
-        this.updateMessageState(payload.updatedMsg, payload.roomID);
-      });
-    }
-    else {
-      const localSocket = localStorage.getItem('socket') || "";
-    }
+    this.socket.on("connect", () => {
+      console.log("Application socket ID: " + this.socket.id);
+      localStorage.setItem('socket', "loaded");
+      this.http.post(environment.storeSocketID, { socketID: this.socket.id, userID: this.account._id }).subscribe(console.log);
+    });
+    this.socket.on('message', (payload: { message: Message, roomID: string }) => {
+      this.updateMessageCollection(payload.message, payload.roomID);
+    });
+    this.socket.on('updateMsgState', (payload: { roomID: string, updatedMsg: Message[] }) => {
+      this.updateMessageState(payload.updatedMsg, payload.roomID);
+    });
 
     return () => {
       console.log("Socket disconnect");

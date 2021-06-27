@@ -4,7 +4,7 @@ const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
 const Message = require('../model/messageCollection');
 const Contact = require('../model/contactsCollection');
-const { addUser, getSocketID, getUser, removeUser } = require('../utils/users');
+const { getUser } = require('../utils/users');
 const { updateState } = require('../utils/realTimeData');
 
 const loadMessages = async (req, res, next) => {
@@ -20,29 +20,6 @@ const loadMessages = async (req, res, next) => {
     });
     logger(`${roomID} messages has been fetched`);
     res.status(HttpStatusCode.OK).send(chatRoom);
-}
-
-const storeSocketID = async (req, res, next) => {
-    const socketID = req.body.socketID;
-    const userID = req.body.userID;
-    logger(`storing socketID ${socketID}`);
-    const { error, user } = addUser({ socketID, userID });
-    if (error) {
-        error.statusCode = HttpStatusCode.NOT_FOUND;
-        next(error);
-    }
-    res.status(HttpStatusCode.OK).send(user);
-}
-
-const removeSocketID = async (req, res, next) => {
-    const socketID = req.body.socketID;
-    logger(`removing socketID ${socketID}`);
-    const { users, error } = removeUser(socketID);
-    if (error) {
-        error.statusCode = HttpStatusCode.NOT_FOUND;
-        next(error);
-    }
-    res.status(HttpStatusCode.OK).send();
 }
 
 const checkOnline = async (req, res, next) => {
@@ -144,8 +121,6 @@ const updateScrollHeight = async (req, res, next) => {
 
 module.exports = {
     loadMessages,
-    storeSocketID,
-    removeSocketID,
     checkOnline,
     updateMessageHeight,
     updateMessageState,

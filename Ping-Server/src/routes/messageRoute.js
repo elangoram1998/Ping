@@ -2,8 +2,6 @@ const express = require('express');
 const auth = require('../middleware/auth');
 const {
     loadMessages,
-    storeSocketID,
-    removeSocketID,
     checkOnline,
     updateMessageHeight,
     updateMessageState,
@@ -15,8 +13,6 @@ router.use(auth);
 
 router
     .get('/loadMessages', loadMessages)
-    .post('/storeSocketID', storeSocketID)
-    .post('/removeSocketID', removeSocketID)
     .get('/checkOnline', checkOnline)
     .post('/updateMsgHeight', updateMessageHeight)
     .patch('/updateMsgState', updateMessageState)

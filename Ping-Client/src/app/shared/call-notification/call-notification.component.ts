@@ -27,7 +27,7 @@ export class CallNotificationComponent implements OnInit, OnDestroy {
         this.timeout = setTimeout(() => {
           this.notification = false;
           this.cutCall(caller._id);
-        }, 10000)
+        }, 30000)
       });
 
     this.cancelSubscription = this.socketService.hideNotification().subscribe(

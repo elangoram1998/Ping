@@ -1,7 +1,16 @@
 <div *ngIf="notification">
-    <div *ngFor="let caller of callers">
-        <span>Getting call from {{caller.username}}</span>
-        <button (click)="answerCall(caller._id)">answer</button>
-        <button (click)="cutCall(caller._id)">cancel</button>
-    </div>
+    <mat-card *ngFor="let caller of callers">
+        <mat-card-header>
+            <img [src]="caller.avatar" mat-card-avatar alt="Profile">
+            <mat-card-title>{{caller.username}}</mat-card-title>
+            <mat-card-subtitle>Calling you...</mat-card-subtitle>
+            <span class="spacer"></span>
+            <button (click)="answerCall(caller._id)" style="background-color: #5DF443; color: white;" mat-fab>
+                <mat-icon>phone</mat-icon>
+            </button>
+            <button (click)="cutCall(caller._id)" color="warn" mat-fab>
+                <mat-icon>call_end</mat-icon>
+            </button>
+        </mat-card-header>
+    </mat-card>
 </div>

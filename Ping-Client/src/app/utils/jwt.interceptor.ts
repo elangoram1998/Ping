@@ -26,7 +26,7 @@ export class JwtInterceptor implements HttpInterceptor {
       }
     );
     const token = localStorage.getItem('token');
-    const isApiUrl = !request.url.startsWith(environment.apiUrl);
+    const isApiUrl = !request.url.startsWith(environment.apiUrl) && !request.url.startsWith(environment.socket);
     if (this.isUserLogged && token && isApiUrl) {
       console.log(`jwt intercepted url: ${request.url}`);
       request = request.clone({

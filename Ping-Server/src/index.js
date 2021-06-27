@@ -12,6 +12,7 @@ const WebSocket = require('./utils/WebSocket');
 const authRouter = require('./routes/authRoute');
 const homeRouter = require('./routes/homeRoute');
 const messageRouter = require('./routes/messageRoute');
+const socketRouter = require('./routes/socketRoute');
 
 const app = express();
 app.use(express.json());
@@ -28,6 +29,7 @@ global.io = socketio(server, {
 
 io.on('connection', WebSocket.connection);
 app.use('/api/auth', authRouter);
+app.use('/api/socket', socketRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/home', homeRouter);
 

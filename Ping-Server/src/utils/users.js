@@ -3,20 +3,22 @@ const logger = require('../utils/logger');
 const users = [];
 
 const addUser = ({ socketID, userID }) => {
-    const checkUser = users.find(user => {
-        return user.userID === userID
-    });
-    if (!!checkUser) {
-        return {
-            'Error': 'User already connected'
-        }
+    console.log(users);
+    const index = users.findIndex(user => user.userID === userID);
+    console.log(index);
+    if (index === -1) {
+        const user = { socketID, userID }
+        users.push(user);
+        logger(`${userID} connected to the socket ID ${socketID}`);
+        console.log(users);
+        return user;
     }
-
-    const user = { socketID, userID }
-    users.push(user);
-    logger(`${users}`);
-    logger(`${userID} connected to the socket ID ${socketID}`);
-    return user;
+    else {
+        users[index].socketID = socketID;
+        logger(`Updating socketID ${socketID} of user ${userID}`);
+        console.log(users);
+        return user[index];
+    }
 }
 
 const getUser = (userID) => {

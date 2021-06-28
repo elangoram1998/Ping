@@ -13,9 +13,13 @@
                 <div class="col-12">
                     <div id="my-grid" #mygrid></div>
                 </div>
-                <div class="col-12">
-                    <button (click)="disconnectCall()">Disconnect</button>
-                </div>
+            </div>
+            <div class="text-center">
+                <mat-card>
+                    <button (click)="disconnectCall()" color="warn" mat-fab>
+                        <mat-icon>call_end</mat-icon>
+                    </button>
+                </mat-card>
             </div>
         </div>
         <div class="col-sm-4 dummy"></div>

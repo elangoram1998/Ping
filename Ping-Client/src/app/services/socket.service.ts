@@ -99,7 +99,6 @@ export class SocketService implements OnDestroy {
     messages.forEach(message => {
       myChatRoom.messages[message.messageCount - 1] = message;
     });
-    console.log(myChatRoom.messages);
     const update: Update<MessageCollection> = {
       id: roomID,
       changes: myChatRoom

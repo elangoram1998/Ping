@@ -13,9 +13,12 @@
                 </p>
                 <p class="msg-time">
                     <small>{{message.createdAt | date:'h:mm a'}}</small>
-                    <small *ngIf="message.state==='read'">
+                    <small *ngIf="message.state==='read';else other_content">
                         <mat-icon color="primary">done_all</mat-icon>
                     </small>
+                    <ng-template #other_content>
+                        <mat-icon>done_all</mat-icon>
+                    </ng-template>
                 </p>
             </div>
         </ng-template>

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { selectAccount } from 'src/app/auth/selectors/account.selectors';
 import { selectContact } from 'src/app/home/selectors/contacts.selectors';
 import { Account } from 'src/app/interfaces/account';
@@ -86,7 +86,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.socketService.checkOnline(this.contactID).subscribe(
       isOnline => {
         if (isOnline) {
-          this.router.navigate(['videoOraudioCall'], { queryParams: { contactID: this.contactID, action: 'call' } });
+          this.router.navigate(['ping/videoOraudioCall'], { queryParams: { contactID: this.contactID, action: 'call' } });
         }
         else {
 

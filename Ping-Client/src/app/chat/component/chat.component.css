@@ -1,9 +1,23 @@
+.page-layout {
+    overflow-y: hidden;
+}
+
 .row {
     height: 100%;
 }
 
-.example-spacer {
+.spacer {
     flex: 1 1 auto;
+}
+
+.message-box {
+    padding: 12px;
+    background: #fff;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    border-color: white;
+    width: 100%;
 }
 
 .full-width {
@@ -14,4 +28,3 @@
     background-color: white;
     height: 680px;
 }
-

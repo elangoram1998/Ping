@@ -9,12 +9,11 @@ import { SocketService } from './services/socket.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
 
   title = 'Ping-Client';
-  disposeSocketConnection!: VoidFunction;
 
-  constructor(private store: Store<AppState>, private socketService: SocketService) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     const account = localStorage.getItem('account');
@@ -22,10 +21,5 @@ export class AppComponent implements OnInit, OnDestroy {
     if (account) {
       this.store.dispatch(loadAccount({ account: JSON.parse(account) }));
     }
-    this.disposeSocketConnection = this.socketService.connect();
-  }
-
-  ngOnDestroy(): void {
-    this.disposeSocketConnection();
   }
 }

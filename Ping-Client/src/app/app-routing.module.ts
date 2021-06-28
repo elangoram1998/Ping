@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { AuthGuard } from './authGuard/auth.guard';
-import { ChatResolver } from './chat/resolver/chat.resolver';
-import { HomeResolver } from './home/resolver/home.resolver';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
@@ -22,20 +20,8 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: "home",
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-    canActivate: [AuthGuard],
-    resolve: [HomeResolver]
-  },
-  {
-    path: "chat",
-    loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule),
-    canActivate: [AuthGuard],
-    resolve: [HomeResolver, ChatResolver]
-  },
-  {
-    path: "videoOraudioCall",
-    loadChildren: () => import('./video-oraudio-call/video-oraudio-call.module').then(m => m.VideoOraudioCallModule),
+    path: "ping",
+    loadChildren: () => import('./main-layout/main-layout.module').then(m => m.MainLayoutModule),
     canActivate: [AuthGuard]
   },
   {

@@ -40,7 +40,7 @@ export class CallNotificationComponent implements OnInit, OnDestroy {
 
   answerCall(callerID: string) {
     clearTimeout(this.timeout);
-    this.router.navigate(['videoOraudioCall'], { queryParams: { contactID: callerID, action: 'callAnswered' } });
+    this.router.navigate(['ping/videoOraudioCall'], { queryParams: { contactID: callerID, action: 'callAnswered' } });
   }
 
   cancellAllCalls(exception: string) {

@@ -6,21 +6,31 @@
             <mat-toolbar>
                 <img class="mt-3" [src]="contact?.contactID?.avatar" width="65" height="65">
                 <span class="mb-2">{{contact?.contactID?.username}}</span>
-                <button type="button" mat-raised-button matSuffix (click)="mediaCall()">
-                    call
+                <span class="spacer"></span>
+                <button matTooltip="video call" type="button" mat-icon-button (click)="mediaCall()">
+                    <mat-icon>video_call</mat-icon>
+                </button>
+                <button mat-icon-button aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
                 </button>
             </mat-toolbar>
             <app-messages [roomID]="roomID" [contactID]="contactID" [messages]="messages" [chatRoom]="myChatRoom"
                 [contact]="contact">
             </app-messages>
-            <div>
+            <div class="mt-2">
                 <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
-                    <mat-form-field>
-                        <input matInput formControlName="message" type="text" placeholder="Type message..">
-                        <button type="submit" mat-raised-button matSuffix [disabled]="messageForm.invalid">
-                            send
-                        </button>
-                    </mat-form-field>
+                    <div class="row">
+                        <div class="col-10 mt-2">
+                            <input class="message-box" formControlName="message" type="text" placeholder="Type message..">
+                        </div>
+                        <div class="col-2">
+                            <button style="background-color: #2CF6C9; color: white;" type="submit" mat-fab matSuffix
+                                [disabled]="messageForm.invalid">
+                                <mat-icon>send</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>

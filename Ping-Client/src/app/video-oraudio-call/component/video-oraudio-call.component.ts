@@ -8,7 +8,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { Observable, Subscription } from 'rxjs';
 import Peer from 'peerjs';
 import { Contact } from 'src/app/interfaces/contact';
-import { selectContact, selectContactByID } from 'src/app/home/selectors/contacts.selectors';
+import { selectContactByID } from 'src/app/home/selectors/contacts.selectors';
 import { Account } from 'src/app/interfaces/account';
 import { selectAccount } from 'src/app/auth/selectors/account.selectors';
 
@@ -49,6 +49,7 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.load();
+    //window.onbeforeunload = () => this.ngOnDestroy();
   }
 
   load(): void {
@@ -115,6 +116,7 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
         this.contactVideoTracks = stream.getTracks();
         const call = this.peerObject.call(peerID, stream);
         const video = document.createElement('video');
+        video.setAttribute("style", "width:100%;");
         call.on('stream', mediaStream => {
           this.addMediaStream(video, mediaStream, 'contact');
         });
@@ -136,6 +138,7 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
           this.contactVideoTracks = stream.getTracks();
           call.answer(stream);
           const video = document.createElement('video');
+          video.setAttribute("style", "width:100%;");
           call.on('stream', mediaStream => {
             this.addMediaStream(video, mediaStream, 'contact');
           });
@@ -156,6 +159,7 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
       stream => {
         this.myvideoTracks = stream.getTracks();
         const video = document.createElement('video');
+        video.setAttribute("style", "width:100%;");
         this.addMediaStream(video, stream, 'mine');
       }
     );
@@ -177,10 +181,9 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
   disconnectCall() {
     if (this.isPeerConnected) {
       this.socketService.disconnectCall(this.contactID, this.peerID);
-      this.myvideoTracks.forEach(track => track.stop());
       this.contactVideoTracks.forEach(track => track.stop());
       this.connectedPeers.close();
-      this.peerObject.destroy();
+      this.destroyPeer();
       this.location.back();
     }
     else {
@@ -190,12 +193,31 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
   }
 
   cancelMediaCall() {
-    this.myvideoTracks.forEach(track => track.stop());
-    this.peerObject.destroy();
+    this.destroyPeer();
     this.location.back();
   }
 
+  destroyAll() {
+    if (this.isPeerConnected) {
+      this.socketService.disconnectCall(this.contactID, this.peerID);
+      this.contactVideoTracks.forEach(track => track.stop());
+      this.connectedPeers.close();
+      this.destroyPeer();
+    }
+    else {
+      this.socketService.cancelMediaCall(this.contactID, this.account);
+      this.destroyPeer();
+    }
+  }
+
+  destroyPeer() {
+    this.myvideoTracks.forEach(track => track.stop());
+    this.peerObject.destroy();
+  }
+
   ngOnDestroy(): void {
+    console.log("calling destroy");
+    this.destroyAll();
     this.isPeerConnected = false;
     this.mediaSubscription$.unsubscribe();
     this.contactSubscription$.unsubscribe();

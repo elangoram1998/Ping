@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   goToChat(roomID: string, contactID: string) {
-    this.router.navigate(['chat'], { queryParams: { roomID, contactID } });
+    this.router.navigate(['ping/chat'], { queryParams: { roomID, contactID } });
   }
 
   ngOnDestroy(): void {

@@ -34,7 +34,7 @@ export class LoginComponent {
     this.authService.loginAccount(this.Username?.value, this.Password?.value).pipe(
       tap((res: { account: Account, token: string }) => {
         this.store.dispatch(loadAccount({ account: res.account }));
-        this.router.navigate(['home']);
+        this.router.navigate(['ping']);
       })
     ).subscribe(
       noop,

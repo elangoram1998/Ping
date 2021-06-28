@@ -161,7 +161,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     console.log("start count: " + start);
     let end = 0;
     for (var i = start; i < this.messagesCount; i++) {
-      if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight + 6) {
+      if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight + 15) {
         if (this.updatedMessages[i].owner_id._id !== this.account._id) {
           console.log("inside contact message");
           messagesInInterval.push(this.updatedMessages[i]);

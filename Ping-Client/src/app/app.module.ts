@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
 import { MaterialModule } from './material/material.module';
 import { reducers, metaReducers } from './reducers';
 import { JwtInterceptor } from './utils/jwt.interceptor';
+import { MainLayoutModule } from './main-layout/main-layout.module';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { JwtInterceptor } from './utils/jwt.interceptor';
     }),
     SharedModule,
     AuthModule,
+    MainLayoutModule,
     MaterialModule,
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),

@@ -3,9 +3,7 @@ const logger = require('../utils/logger');
 const users = [];
 
 const addUser = ({ socketID, userID }) => {
-    console.log(users);
     const index = users.findIndex(user => user.userID === userID);
-    console.log(index);
     if (index === -1) {
         const user = { socketID, userID }
         users.push(user);

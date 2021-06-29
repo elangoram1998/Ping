@@ -1,6 +1,7 @@
 const logger = require('../utils/logger');
 
 const users = [];
+const peers = [];
 
 const addUser = ({ socketID, userID }) => {
     const index = users.findIndex(user => user.userID === userID);
@@ -44,9 +45,40 @@ const removeUser = (socketID) => {
     };
 }
 
+const addPeer = (peersArray) => {
+    logger(`Adding peer connections...`);
+    peersArray.forEach(ID => {
+        const index = peers.findIndex(peer => peer.ID === ID);
+        if (index === -1) {
+            peers.push({ ID });
+        }
+    });
+    console.log(peers);
+}
+
+const removePeer = (peersArray) => {
+    peersArray.forEach(ID => {
+        const index = peers.findIndex(peer => peer.ID === ID);
+        if (index !== -1) {
+            logger(`Removing peer connection...`);
+            peers.splice(index, 1)[0];
+        }
+    });
+    console.log(peers);
+}
+
+const getPeer = (userID) => {
+    const peer = peers.find(peer => peer.ID === userID);
+    logger(`Get peer user ${peer}`);
+    return peer;
+}
+
 module.exports = {
     addUser,
     getUser,
     getSocketID,
-    removeUser
+    removeUser,
+    addPeer,
+    removePeer,
+    getPeer
 }

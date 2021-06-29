@@ -33,8 +33,8 @@ export class SocketService implements OnDestroy {
       account => {
         this.account = account;
       });
-
-    this.socket = io(environment.server);
+    const token = localStorage.getItem('token');
+    this.socket = io(environment.server, { auth: { token } });
 
     this.socket.on("connect", () => {
       console.log("Application socket ID: " + this.socket.id);
@@ -66,6 +66,13 @@ export class SocketService implements OnDestroy {
   checkOnline(contactID: string): Observable<boolean> {
     const params = new HttpParams().set('contactID', contactID);
     return this.http.get<boolean>(environment.checkOnline, { params }).pipe(
+      catchError(handleError)
+    );
+  }
+
+  checkIsOnCall(contactID: string): Observable<boolean> {
+    const params = new HttpParams().set('contactID', contactID);
+    return this.http.get<boolean>(environment.checkIsOnCall, { params }).pipe(
       catchError(handleError)
     );
   }

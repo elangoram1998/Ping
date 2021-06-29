@@ -4,7 +4,7 @@ const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
 const Message = require('../model/messageCollection');
 const Contact = require('../model/contactsCollection');
-const { getUser } = require('../utils/users');
+const { getUser, getPeer } = require('../utils/users');
 const { updateState } = require('../utils/realTimeData');
 
 const loadMessages = async (req, res, next) => {
@@ -119,10 +119,21 @@ const updateScrollHeight = async (req, res, next) => {
     });
 }
 
+const checkIsOnCall = async (req, res, next) => {
+    const contactID = req.query.contactID;
+    logger(`chekcing is ${contactID} speaking to someone else now`);
+    const peer = getPeer(contactID);
+    if (peer) {
+        return res.status(HttpStatusCode.OK).send(true);
+    }
+    res.status(HttpStatusCode.OK).send(false);
+}
+
 module.exports = {
     loadMessages,
     checkOnline,
     updateMessageHeight,
     updateMessageState,
-    updateScrollHeight
+    updateScrollHeight,
+    checkIsOnCall
 }

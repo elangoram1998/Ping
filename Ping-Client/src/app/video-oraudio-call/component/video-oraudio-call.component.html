@@ -8,7 +8,14 @@
             </mat-toolbar>
             <div class="row">
                 <div class="col-12">
-                    <div id="contact-grid" #contactgrid></div>
+                    <div *ngIf="isPeerConnected;else calling">
+                        <div id="contact-grid" #contactgrid></div>
+                    </div>
+                    <ng-template #calling>
+                        <div class="calling">
+                            <h2>Calling...</h2>
+                        </div>
+                    </ng-template>
                 </div>
                 <div class="col-12">
                     <div id="my-grid" #mygrid></div>

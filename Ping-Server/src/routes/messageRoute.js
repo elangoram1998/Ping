@@ -5,7 +5,8 @@ const {
     checkOnline,
     updateMessageHeight,
     updateMessageState,
-    updateScrollHeight } = require('../controller/messageController');
+    updateScrollHeight,
+    checkIsOnCall } = require('../controller/messageController');
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router
     .post('/updateMsgHeight', updateMessageHeight)
     .patch('/updateMsgState', updateMessageState)
     .patch('/updateScrollHeight', updateScrollHeight)
+    .get('/checkIsOnCall', checkIsOnCall)
 
 module.exports = router;

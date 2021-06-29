@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { selectAccount } from 'src/app/auth/selectors/account.selectors';
 import { selectContact } from 'src/app/home/selectors/contacts.selectors';
@@ -36,7 +37,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store<AppState>,
     private fb: FormBuilder,
-    private socketService: SocketService) { }
+    private socketService: SocketService,
+    private toastr: ToastrService) { }
 
   messageForm = this.fb.group({
     message: ['', Validators.required]
@@ -86,10 +88,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.socketService.checkOnline(this.contactID).subscribe(
       isOnline => {
         if (isOnline) {
-          this.router.navigate(['ping/videoOraudioCall'], { queryParams: { contactID: this.contactID, action: 'call' } });
+          this.socketService.checkIsOnCall(this.contactID).subscribe(
+            isOnCall => {
+              if (isOnCall) {
+                this.toastr.info('Please try again later', `${this.contact?.contactID.username} is currently speaking with someone else`);
+              }
+              else {
+                this.router.navigate(['ping/videoOraudioCall'], { queryParams: { contactID: this.contactID, action: 'call' } });
+              }
+            }
+          );
         }
         else {
-
+          this.toastr.info('you cannot call a person, who is not in online. please call again later', `${this.contact?.contactID.username} is not in online`);
         }
       }
     )

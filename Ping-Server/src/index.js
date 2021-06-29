@@ -8,6 +8,7 @@ require('./database/mongoDB');
 require('./utils/peer');
 const { errorMsg, success } = require('./utils/constants');
 const HttpStatusCode = require('./utils/httpStatusCode');
+const socketAuth = require('./middleware/socketAuth');
 const WebSocket = require('./utils/WebSocket');
 const authRouter = require('./routes/authRoute');
 const homeRouter = require('./routes/homeRoute');
@@ -27,7 +28,8 @@ global.io = socketio(server, {
     }
 });
 
-io.on('connection', WebSocket.connection);
+io.use(socketAuth).on('connection', WebSocket.connection);
+
 app.use('/api/auth', authRouter);
 app.use('/api/socket', socketRouter);
 app.use('/api/message', messageRouter);

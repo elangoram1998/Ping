@@ -1,3 +1,21 @@
 export const environment = {
-  production: true
+  production: true,
+  server: 'http://localhost:3000',
+  socket: 'http://localhost:3000/api/socket',
+  apiUrl: 'http://localhost:3000/api/auth',
+  register: 'http://localhost:3000/api/auth/register',
+  login: 'http://localhost:3000/api/auth/login',
+  logout: 'http://localhost:3000/api/auth/logout',
+  checkUsername: 'http://localhost:3000/api/auth/checkUsername',
+  loadContacts: 'http://localhost:3000/api/home/loadContacts',
+  searchUsers: 'http://localhost:3000/api/home/searchUsers',
+  addContact: 'http://localhost:3000/api/home/addContact',
+  loadMyMessages: 'http://localhost:3000/api/message/loadMessages',
+  storeSocketID: 'http://localhost:3000/api/socket/storeSocketID',
+  removeSocketID: 'http://localhost:3000/api/socket/removeSocketID',
+  checkOnline: 'http://localhost:3000/api/message/checkOnline',
+  updateMessageHeight: 'http://localhost:3000/api/message/updateMsgHeight',
+  updateMessageState: 'http://localhost:3000/api/message/updateMsgState',
+  updateScrollHeight: 'http://localhost:3000/api/message/updateScrollHeight',
+  checkIsOnCall: 'http://localhost:3000/api/message/checkIsOnCall'
 };

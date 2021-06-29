@@ -1,8 +1,7 @@
 const chalk = require('chalk');
 const ChatRoom = require('../model/chatRoomCollection');
 const Message = require('../model/messageCollection');
-const Contact = require('../model/contactsCollection');
-const { removeUser, getSocketID } = require('./users');
+const { removeUser, getSocketID, addPeer, removePeer } = require('./users');
 const { sendMessage } = require('./realTimeData');
 const { updateTotalMessageCount } = require('./utils');
 
@@ -47,15 +46,19 @@ class WebSocket {
 
         socket.on('answer-call', ({ callerID, peerID }) => {
             const socketID = getSocketID(callerID);
+            const peersArray = [socket._id, callerID];
             if (socketID) {
                 global.io.to(socketID).emit('call-picked', peerID);
+                addPeer(peersArray);
             }
         });
 
         socket.on('disconnect-call', ({ contactID, peerID }) => {
             const socketID = getSocketID(contactID);
+            const peersArray = [socket._id, contactID];
             if (socketID) {
                 global.io.to(socketID).emit('user-disconnected', peerID);
+                removePeer(peersArray);
             }
         });
 

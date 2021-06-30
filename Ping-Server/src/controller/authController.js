@@ -47,21 +47,10 @@ const usernameExist = async (req, res, next) => {
     res.status(HttpStatusCode.OK).send(false);
 }
 
-const logout = async (req, res, next) => {
-    req.account.tokens.filter(tokens => tokens.token != req.token);
-    await req.account.save().catch((error) => {
-        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
-        next(error);
-    });
-    logger(`${req.account.username} logged out the application`);
-    res.status(HttpStatusCode.OK).json({
-        success: 'User logged out successfully'
-    });
-}
+
 
 module.exports = {
     register,
     login,
-    logout,
     usernameExist
 }

@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../authGuard/auth.guard';
 import { HomeResolver } from '../home/resolver/home.resolver';
 import { ChatResolver } from '../chat/resolver/chat.resolver';
+import { ProfileComponent } from '../shared/profile/profile.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,10 @@ const routes: Routes = [
         path: "videoOraudioCall",
         loadChildren: () => import('../video-oraudio-call/video-oraudio-call.module').then(m => m.VideoOraudioCallModule),
         canActivate: [AuthGuard]
+      },
+      {
+        path: "profile",
+        component: ProfileComponent
       }
     ]
   }

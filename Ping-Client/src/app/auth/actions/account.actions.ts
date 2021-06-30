@@ -6,6 +6,10 @@ export const loadAccount = createAction(
   props<{ account: Account }>()
 );
 
+export const logout = createAction(
+  '[Logout] Account Logout'
+);
+
 
 
 

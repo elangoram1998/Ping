@@ -3,6 +3,7 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
 @import '~ngx-toastr/toastr';
 html, body {
     height: 100%;
@@ -42,6 +43,10 @@ button {
     top: 0;
     bottom: 0;
     overflow-x: hidden;
+}
+
+.caption {
+    font-family: 'Inter', sans-serif;
 }
 
 mat-form-field {

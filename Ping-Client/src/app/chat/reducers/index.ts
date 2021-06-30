@@ -4,6 +4,7 @@ import {
   MetaReducer,
   on
 } from '@ngrx/store';
+import { logout } from 'src/app/auth/actions/account.actions';
 import { MessageCollection } from 'src/app/interfaces/message-collection';
 import { environment } from '../../../environments/environment';
 import { insertMessage, MessagesLoaded, updateMessageState, updateMsgHeight, updateScrollHeight } from '../actions/messages.actions';
@@ -26,7 +27,8 @@ export const messageReducer = createReducer(
   on(insertMessage, (state, action) => adapter.updateOne(action.update, state)),
   on(updateMsgHeight, (state, action) => adapter.updateOne(action.update, state)),
   on(updateMessageState, (state, action) => adapter.updateOne(action.update, state)),
-  on(updateScrollHeight, (state, action) => adapter.updateOne(action.update, state))
+  on(updateScrollHeight, (state, action) => adapter.updateOne(action.update, state)),
+  on(logout, (state, action) => adapter.removeAll(state))
 );
 
 export const { selectAll } = adapter.getSelectors();

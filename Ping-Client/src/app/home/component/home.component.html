@@ -15,6 +15,24 @@
                             (click)="addContact(user)">Add</button>
                     </mat-option>
                 </mat-autocomplete>
+                <button mat-button [matMenuTriggerFor]="menu">
+                    <img class="avatar-img" [src]="account.avatar" alt="profile pic" width="60" height="60">
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button (click)="goToProfile()" mat-menu-item>
+                        <img class="dropdwn-img" src="../../../assets/profile.png" width="27" height="27" alt="profile">
+                        <span>Profile</span>
+                    </button>
+                    <button (click)="goToProfile()" mat-menu-item>
+                        <img class="dropdwn-img" src="../../../assets/edit profile.png" width="27" height="27"
+                            alt="profile">
+                        <span>Edit Profile</span>
+                    </button>
+                    <button (click)="logout()" mat-menu-item>
+                        <img class="dropdwn-img" src="../../../assets/logout.png" width="27" height="27" alt="logout">
+                        <span>Logout</span>
+                    </button>
+                </mat-menu>
             </mat-toolbar>
             <app-call-notification></app-call-notification>
             <div class="contact-list">

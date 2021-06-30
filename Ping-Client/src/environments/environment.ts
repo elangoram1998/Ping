@@ -9,7 +9,7 @@ export const environment = {
   apiUrl: 'http://localhost:3000/api/auth',
   register: 'http://localhost:3000/api/auth/register',
   login: 'http://localhost:3000/api/auth/login',
-  logout: 'http://localhost:3000/api/auth/logout',
+  logout: 'http://localhost:3000/api/home/logout',
   checkUsername: 'http://localhost:3000/api/auth/checkUsername',
   loadContacts: 'http://localhost:3000/api/home/loadContacts',
   searchUsers: 'http://localhost:3000/api/home/searchUsers',

@@ -49,8 +49,21 @@ const addContact = async (req, res, next) => {
     res.status(HttpStatusCode.OK).send(myContact);
 }
 
+const logout = async (req, res, next) => {
+    req.account.tokens.filter(tokens => tokens.token != req.token);
+    await req.account.save().catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    logger(`${req.account.username} logged out the application`);
+    res.status(HttpStatusCode.OK).json({
+        success: 'User logged out successfully'
+    });
+}
+
 module.exports = {
     loadContacts,
     searchUsers,
-    addContact
+    addContact,
+    logout
 }

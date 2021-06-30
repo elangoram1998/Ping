@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
+import { logout } from 'src/app/auth/actions/account.actions';
 import { selectAccount } from 'src/app/auth/selectors/account.selectors';
 import { Account } from 'src/app/interfaces/account';
 import { Contact } from 'src/app/interfaces/contact';
@@ -62,6 +63,14 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goToChat(roomID: string, contactID: string) {
     this.router.navigate(['ping/chat'], { queryParams: { roomID, contactID } });
+  }
+
+  goToProfile() {
+    this.router.navigate(['ping/profile']);
+  }
+
+  logout() {
+    this.store.dispatch(logout());
   }
 
   ngOnDestroy(): void {

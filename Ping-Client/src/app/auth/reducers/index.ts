@@ -5,7 +5,7 @@ import {
 } from '@ngrx/store';
 import { Account } from 'src/app/interfaces/account';
 import { environment } from '../../../environments/environment';
-import { loadAccount } from '../actions/account.actions';
+import { loadAccount, logout } from '../actions/account.actions';
 
 export const accountFeatureKey = 'account';
 

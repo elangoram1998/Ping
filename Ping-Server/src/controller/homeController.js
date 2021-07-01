@@ -49,6 +49,19 @@ const addContact = async (req, res, next) => {
     res.status(HttpStatusCode.OK).send(myContact);
 }
 
+const updateAccount = async (req, res, next) => {
+    const bio = req.body.bio;
+    const email = req.body.email;
+    req.account.bio = bio;
+    req.account.email = email;
+    await req.account.save().catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    logger(`Account updated`);
+    res.status(HttpStatusCode.OK).send(req.account);
+}
+
 const logout = async (req, res, next) => {
     req.account.tokens.filter(tokens => tokens.token != req.token);
     await req.account.save().catch((error) => {
@@ -65,5 +78,6 @@ module.exports = {
     loadContacts,
     searchUsers,
     addContact,
+    updateAccount,
     logout
 }

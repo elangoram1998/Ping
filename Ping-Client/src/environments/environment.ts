@@ -21,7 +21,10 @@ export const environment = {
   updateMessageHeight: 'http://localhost:3000/api/message/updateMsgHeight',
   updateMessageState: 'http://localhost:3000/api/message/updateMsgState',
   updateScrollHeight: 'http://localhost:3000/api/message/updateScrollHeight',
-  checkIsOnCall: 'http://localhost:3000/api/message/checkIsOnCall'
+  checkIsOnCall: 'http://localhost:3000/api/message/checkIsOnCall',
+  editProfile: 'http://localhost:3000/api/home/editProfile',
+  changeProfilePic: 'http://localhost:3000/api/home/changeProfilePicture',
+  removeProfilePic: 'http://localhost:3000/api/home/removeProfilePicture'
 };
 
 /*

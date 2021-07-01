@@ -2,9 +2,12 @@
     <div class="row">
         <div class="col-sm-4 dummy"></div>
         <div class="col-sm-4 page-body">
-            <div class=" d-flex justify-content-center">
-                <div class=" mt-5">
+            <div class="d-flex justify-content-center">
+                <div class="mt-5">
                     <img class="avatar-img" [src]="account.avatar" width="130" height="130" alt="">
+                </div>
+                <div>
+                    <button (click)="openDialog()">Edit Profile</button>
                 </div>
             </div>
             <div>

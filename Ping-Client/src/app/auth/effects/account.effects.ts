@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatMap, tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
-import { logout } from '../actions/account.actions';
+import { HomeService } from 'src/app/services/home.service';
+import { logout, updateAccount } from '../actions/account.actions';
 
 
 @Injectable()
@@ -19,8 +20,20 @@ export class AccountEffects {
           this.router.navigate(['/']);
         })
       ), { dispatch: false }
-  )
+  );
 
-  constructor(private actions$: Actions, private authService: AuthService, private router: Router) { }
+  updateAccount$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(updateAccount),
+        concatMap(action => this.homeService.editProfile(action.update.bio || "", action.update.email)),
+        tap(res => {
+          localStorage.removeItem('account');
+          localStorage.setItem('account', JSON.stringify(res));
+        })
+      ), { dispatch: false }
+  );
+
+  constructor(private actions$: Actions, private authService: AuthService, private router: Router, private homeService: HomeService) { }
 
 }

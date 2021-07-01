@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
@@ -30,7 +31,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSelectModule,
     MatAutocompleteModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ]
 })
 export class MaterialModule { }

@@ -5,7 +5,7 @@ import {
 } from '@ngrx/store';
 import { Account } from 'src/app/interfaces/account';
 import { environment } from '../../../environments/environment';
-import { loadAccount, logout } from '../actions/account.actions';
+import { loadAccount, logout, updateAccount } from '../actions/account.actions';
 
 export const accountFeatureKey = 'account';
 
@@ -28,6 +28,11 @@ export const accountReducer = createReducer(
   on(loadAccount, (state, action) => {
     return {
       account: action.account
+    }
+  }),
+  on(updateAccount, (state, action) => {
+    return {
+      account: action.update
     }
   })
 );

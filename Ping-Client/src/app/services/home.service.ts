@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { contactAdded } from '../home/actions/contacts.actions';
+import { Account } from '../interfaces/account';
 import { Contact } from '../interfaces/contact';
 import { Search } from '../interfaces/search';
 import { AppState } from '../reducers';
@@ -36,6 +37,24 @@ export class HomeService {
       tap((contact) => {
         this.store.dispatch(contactAdded({ contact }))
       }),
+      catchError(handleError)
+    );
+  }
+
+  editProfile(bio: string, email: string): Observable<Account> {
+    return this.http.put<Account>(environment.editProfile, { bio, email }).pipe(
+      catchError(handleError)
+    );
+  }
+
+  changeProfilePic(fd: FormData): Observable<string> {
+    return this.http.post<string>(environment.changeProfilePic, fd).pipe(
+      catchError(handleError)
+    );
+  }
+
+  removeProfilePic(): Observable<string> {
+    return this.http.post<string>(environment.removeProfilePic, {}).pipe(
       catchError(handleError)
     );
   }

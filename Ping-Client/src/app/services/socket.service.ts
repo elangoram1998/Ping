@@ -34,7 +34,8 @@ export class SocketService implements OnDestroy {
         this.account = account;
       });
     const token = localStorage.getItem('token');
-    this.socket = io(environment.server, { auth: { token } });
+    //this.socket = io(environment.server, { auth: { token } });
+    this.socket = io({ auth: { token } });
 
     this.socket.on("connect", () => {
       console.log("Application socket ID: " + this.socket.id);

@@ -63,7 +63,7 @@ const updateAccount = async (req, res, next) => {
 }
 
 const logout = async (req, res, next) => {
-    req.account.tokens.filter(tokens => tokens.token != req.token);
+    req.account.tokens = req.account.tokens.filter(tokens => tokens.token != req.token);
     await req.account.save().catch((error) => {
         error.statusCode = HttpStatusCode.INTERNAL_SERVER;
         next(error);

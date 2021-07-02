@@ -4,7 +4,7 @@ export const environment = {
   apiUrl: '/api/auth',
   register: '/api/auth/register',
   login: '/api/auth/login',
-  logout: '/api/auth/logout',
+  logout: '/api/home/logout',
   checkUsername: '/api/auth/checkUsername',
   loadContacts: '/api/home/loadContacts',
   searchUsers: '/api/home/searchUsers',

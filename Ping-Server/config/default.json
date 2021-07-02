@@ -11,7 +11,7 @@
         "port": "3000"
     },
     "cors": {
-        "origin": "http://localhost:4200"
+        "origin": "http://localhost"
     },
     "s3": {
         "defaultProfilePic": "https://raven-md-store.s3.ap-south-1.amazonaws.com/profile.png"

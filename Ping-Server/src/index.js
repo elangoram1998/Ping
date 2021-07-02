@@ -23,9 +23,9 @@ app.use(cors({
 const server = http.createServer(app);
 
 global.io = socketio(server, {
-    cors: {
-        origin: 'http://localhost:4200'
-    }
+    // cors: {
+    //     origin: 'http://localhost:4200'
+    // }
 });
 
 io.use(socketAuth).on('connection', WebSocket.connection);

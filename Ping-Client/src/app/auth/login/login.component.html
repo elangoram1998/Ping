@@ -32,11 +32,10 @@
                         <button [disabled]="loginForm.invalid" class="form-button btn" type="submit">Submit</button>
                     </div>
                 </form>
-                <div class="">
-                    <p class="text-center"><a routerLink="/forgotPassword">Forgot password?</a></p>
-                </div>
                 <div class="mt-4 text-center">
-                    <p>Don't have an account? <a routerLink="/SignUp">Sign Up</a></p>
+                    <p>Don't have an account? 
+                        <a href="/register" routerLink="/register">Sign Up</a>
+                    </p>
                 </div>
             </mat-card>
         </div>

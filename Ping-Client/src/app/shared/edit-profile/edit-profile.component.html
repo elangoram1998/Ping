@@ -11,12 +11,8 @@
                 <input type="file" style="display: none;" #selectImg name="post"
                     accept="image/.jpg,image/.jpeg,image/.png" (change)="onChange($event)">
                 <div class="btn-group py-4" role="group">
-                    <button mdbBtn type="button" (click)="selectImg.click()" color="info" class="waves-light"
-                        mdbWavesEffect>Change
-                        Picture</button>
-                    <button mdbBtn type="button" (click)="changeProfilePicture('remove')" color="info"
-                        class="waves-light" mdbWavesEffect>Remove
-                        Picture</button>
+                    <button mat-button type="button" (click)="selectImg.click()">Change</button>
+                    <button mat-button type="button" (click)="changeProfilePicture('remove')">Remove</button>
                 </div>
             </div>
         </div>

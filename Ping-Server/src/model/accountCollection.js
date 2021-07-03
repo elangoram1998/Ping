@@ -24,7 +24,7 @@ const accountSchema = new mongoose.Schema({
     avatar: {
         type: String,
         required: true,
-        default: '/app/src/assets/profile.png'
+        default: config.get('s3.defaultProfilePic')
     },
     bio: {
         type: String,

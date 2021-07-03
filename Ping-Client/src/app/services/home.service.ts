@@ -48,13 +48,13 @@ export class HomeService {
   }
 
   changeProfilePic(fd: FormData): Observable<string> {
-    return this.http.post<string>(environment.changeProfilePic, fd).pipe(
+    return this.http.post<string>(environment.changeProfilePic, fd, { responseType: 'json' }).pipe(
       catchError(handleError)
     );
   }
 
   removeProfilePic(): Observable<string> {
-    return this.http.post<string>(environment.removeProfilePic, {}).pipe(
+    return this.http.post<string>(environment.removeProfilePic, {}, { responseType: 'json' }).pipe(
       catchError(handleError)
     );
   }

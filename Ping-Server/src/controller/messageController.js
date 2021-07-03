@@ -4,8 +4,11 @@ const HttpStatusCode = require('../utils/httpStatusCode');
 const ChatRoom = require('../model/chatRoomCollection.js');
 const Message = require('../model/messageCollection');
 const Contact = require('../model/contactsCollection');
+const Account = require('../model/accountCollection');
 const { getUser, getPeer } = require('../utils/users');
 const { updateState } = require('../utils/realTimeData');
+const { sendEmail } = require('../utils/aws');
+
 
 const loadMessages = async (req, res, next) => {
     const roomID = req.query.roomID;
@@ -29,6 +32,11 @@ const checkOnline = async (req, res, next) => {
     if (user) {
         return res.status(HttpStatusCode.OK).send(true);
     }
+    const contact = await Account.findById({ _id: contactID }).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    sendEmail('call', contact.email, contact.username, req.account.username);
     res.status(HttpStatusCode.OK).send(false);
 }
 
@@ -124,6 +132,11 @@ const checkIsOnCall = async (req, res, next) => {
     logger(`chekcing is ${contactID} speaking to someone else now`);
     const peer = getPeer(contactID);
     if (peer) {
+        const contact = await Account.findById({ _id: contactID }).catch((error) => {
+            error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+            next(error);
+        });
+        sendEmail('call', contact.email, contact.username, req.account.username);
         return res.status(HttpStatusCode.OK).send(true);
     }
     res.status(HttpStatusCode.OK).send(false);

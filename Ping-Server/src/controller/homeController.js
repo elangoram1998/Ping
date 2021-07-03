@@ -1,10 +1,12 @@
 const { v4: uuidv4 } = require('uuid');
+const config = require('config');
 const Contact = require('../model/contactsCollection');
 const Account = require('../model/accountCollection');
 const ChatRoom = require('../model/chatRoomCollection');
 const HttpStatusCode = require('../utils/httpStatusCode');
 const logger = require('../utils/logger');
 const { createContact, sendContactData } = require('../utils/createContact');
+const { uploadImgae } = require('../utils/aws');
 
 const loadContacts = async (req, res, next) => {
     const myAccountID = req.account._id;
@@ -19,7 +21,24 @@ const loadContacts = async (req, res, next) => {
 const searchUsers = async (req, res, next) => {
     const username = req.query.username;
     logger(`Get the results for ${username}`);
+
+    //exclude some id's from search
+    var excludeArray = [];
+    excludeArray.push(req.account._id);
+    const contacts = await Contact.find({ myID: req.account._id }).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    contacts.forEach(contact => {
+        excludeArray.push(contact.contactID);
+    });
+
     const response = await Account.find({
+        _id: {
+            $not: {
+                $in: excludeArray
+            }
+        },
         username: {
             $regex: new RegExp(username),
             $options: 'i'
@@ -62,6 +81,33 @@ const updateAccount = async (req, res, next) => {
     res.status(HttpStatusCode.OK).send(req.account);
 }
 
+const changePicture = async (req, res, next) => {
+    let myFile = req.file.originalname.split(".");
+    const fileType = myFile[myFile.length - 1];
+    const filename = `${uuidv4()}.${fileType}`;
+    const data = await uploadImgae(filename, req.file.buffer).catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    req.account.avatar = data.Location;
+    await req.account.save().catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    logger(`${req.account.username} Profile picture changed successfully`);
+    res.status(HttpStatusCode.OK).json(req.account.avatar);
+}
+
+const removePicture = async (req, res, next) => {
+    req.account.avatar = config.get('s3.defaultProfilePic');
+    await req.account.save().catch((error) => {
+        error.statusCode = HttpStatusCode.INTERNAL_SERVER;
+        next(error);
+    });
+    logger(`${req.account.username} Profile picture removed successfully`);
+    res.status(HttpStatusCode.OK).json(req.account.avatar);
+}
+
 const logout = async (req, res, next) => {
     req.account.tokens = req.account.tokens.filter(tokens => tokens.token != req.token);
     await req.account.save().catch((error) => {
@@ -79,5 +125,7 @@ module.exports = {
     searchUsers,
     addContact,
     updateAccount,
+    changePicture,
+    removePicture,
     logout
 }

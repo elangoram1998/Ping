@@ -5,7 +5,8 @@ const http = require('http');
 const socketio = require('socket.io');
 
 require('./database/mongoDB');
-//require('./utils/peer');
+//comment
+require('./utils/peer');
 const { errorMsg, success } = require('./utils/constants');
 const HttpStatusCode = require('./utils/httpStatusCode');
 const socketAuth = require('./middleware/socketAuth');
@@ -23,9 +24,10 @@ app.use(cors({
 const server = http.createServer(app);
 
 global.io = socketio(server, {
-    // cors: {
-    //     origin: 'http://localhost:4200'
-    // }
+    //comment
+    cors: {
+        origin: 'http://localhost:4200'
+    }
 });
 
 io.use(socketAuth).on('connection', WebSocket.connection);

@@ -77,6 +77,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
           const update: Account = {
             ...this.account
           }
+          localStorage.removeItem('account');
+          localStorage.setItem('account', JSON.stringify(this.account));
           this.store.dispatch(updatePicture({ update }));
         })
       ).subscribe(
@@ -95,6 +97,8 @@ export class EditProfileComponent implements OnInit, OnDestroy {
           const update: Account = {
             ...this.account
           }
+          localStorage.removeItem('account');
+          localStorage.setItem('account', JSON.stringify(this.account));
           this.store.dispatch(updatePicture({ update }));
         })
       ).subscribe(

@@ -8,15 +8,20 @@
                 <span class="example-spacer"></span>
                 <input class="search-bar" type="text" placeholder="Search.." #search [matAutocomplete]="searchRes">
                 <mat-autocomplete #searchRes="matAutocomplete">
-                    <mat-option *ngFor="let user of searchResult$ | async">
-                        <img class="option-img" src="../../../assets/username.png" height="25" alt="profile">
-                        <span>{{user.username}}</span>
-                        <button *ngIf="user.username !== account.username" mat-button
-                            (click)="addContact(user)">Add</button>
-                    </mat-option>
+                    <div *ngIf="(searchResult$ | async)?.length || 0 > 0;else noRes">
+                        <mat-option *ngFor="let user of searchResult$ | async">
+                            <img class="option-img" src="../../../assets/username.png" height="25" alt="profile">
+                            <span>{{user.username}}</span>
+                            <span class="example-spacer"></span>
+                            <button mat-button (click)="addContact(user)">Add</button>
+                        </mat-option>
+                    </div>
+                    <ng-template #noRes>
+                        <mat-option>No Result</mat-option>
+                    </ng-template>
                 </mat-autocomplete>
                 <button mat-button [matMenuTriggerFor]="menu">
-                    <img class="avatar-img" [src]="account.avatar" alt="profile pic" width="60" height="60">
+                    <img class="avatar-img" [src]="account.avatar" alt="profile pic" width="40" height="40">
                 </button>
                 <mat-menu #menu="matMenu">
                     <button (click)="goToProfile()" mat-menu-item>
@@ -31,15 +36,22 @@
             </mat-toolbar>
             <app-call-notification></app-call-notification>
             <div class="contact-list">
-                <mat-selection-list [multiple]="false">
-                    <mat-list-option (click)="goToChat(contact.roomID,contact.contactID._id)"
-                        *ngFor="let contact of contacts$ | async">
-                        <img matListAvatar [src]="contact.contactID.avatar">
-                        <p matLine><b>{{contact.contactID.username}}</b></p>
-                        <span class="badge badge-pill badge-success">Success</span>
-                        <mat-divider></mat-divider>
-                    </mat-list-option>
-                </mat-selection-list>
+                <div *ngIf="(contacts$ | async)?.length || 0 > 0;else noContacts">
+                    <mat-selection-list [multiple]="false">
+                        <mat-list-option (click)="goToChat(contact.roomID,contact.contactID._id)"
+                            *ngFor="let contact of contacts$ | async">
+                            <img matListAvatar [src]="contact.contactID.avatar">
+                            <p matLine><b>{{contact.contactID.username}}</b></p>
+                            <span class="badge badge-pill badge-success">Success</span>
+                            <mat-divider></mat-divider>
+                        </mat-list-option>
+                    </mat-selection-list>
+                </div>
+                <ng-template #noContacts>
+                    <div class="text-center pt-5">
+                        <h4>No Friends, Search and add friends</h4>
+                    </div>
+                </ng-template>
             </div>
         </div>
         <div class="col-sm-4 dummy"></div>

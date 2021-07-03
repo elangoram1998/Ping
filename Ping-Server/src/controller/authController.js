@@ -1,6 +1,7 @@
 const Account = require('../model/accountCollection');
 const logger = require('../utils/logger');
 const HttpStatusCode = require('../utils/httpStatusCode');
+const { sendEmail } = require('../utils/aws');
 
 const register = async (req, res, next) => {
     const payload = req.body;
@@ -10,9 +11,9 @@ const register = async (req, res, next) => {
         next(error);
     });
     logger(`${payload.username} account has been successfully created`);
-    /** AWS Email functionality
-
-     **/
+    //AWS Email functionality
+    sendEmail('register', account.email, account.username);
+    //end
 
     res.status(HttpStatusCode.OK).json({
         success: 'Account has been created successfully'

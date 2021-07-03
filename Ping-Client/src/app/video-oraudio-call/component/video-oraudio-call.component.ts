@@ -67,9 +67,10 @@ export class VideoOraudioCallComponent implements OnInit, OnDestroy {
         this.account = account;
       }
     );
-    this.peerObject = new Peer(undefined, {
-      host: '/',
-      port: 5001
+    this.peerObject = new Peer({
+      host: 'ping-vd.herokuapp.com',
+      port: 443,
+      secure: true
     });
     this.peerObject.on('open', ID => {
       this.peerID = ID;

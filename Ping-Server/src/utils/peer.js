@@ -3,7 +3,7 @@ const { errorMsg, success, warning } = require('../utils/constants');
 
 const peerServer = PeerServer({
     port: 5001,
-    path: '/'
+    host:'/'
 });
 
 peerServer.on('connection', (client) => {

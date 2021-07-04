@@ -1,9 +1,11 @@
 const chalk = require('chalk');
+const { v4: uuidv4 } = require('uuid');
 const ChatRoom = require('../model/chatRoomCollection');
 const Message = require('../model/messageCollection');
 const { removeUser, getSocketID, addPeer, removePeer } = require('./users');
 const { sendMessage } = require('./realTimeData');
 const { updateTotalMessageCount, updateMyMessageCount } = require('./utils');
+const { uploadImgae } = require('./aws');
 
 const errorMsg = chalk.underline.red.bold;
 const success = chalk.underline.green.bold;
@@ -31,6 +33,18 @@ class WebSocket {
                 const messagePopulated = await message.populate('owner_id').execPopulate();
                 sendMessage(contactID, roomID, messagePopulated);
                 callback({ message: messagePopulated, roomID });
+            }
+            catch (error) {
+                console.error(errorMsg(`Something went wrong, Error: ${error}`));
+            }
+        });
+
+        socket.on('sendImage', async ({ contactID, roomID, arrayBuffer }, callback) => {
+            try {
+                const chatRoom = await ChatRoom.findOne({ roomID });
+                const messageSize = chatRoom.messages.length;
+                //const data = await uploadImgae()
+
             }
             catch (error) {
                 console.error(errorMsg(`Something went wrong, Error: ${error}`));

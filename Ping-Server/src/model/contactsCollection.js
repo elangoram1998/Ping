@@ -28,6 +28,18 @@ const contactSchema = new mongoose.Schema({
         required: true,
         min: [0, "message read count should not below zero"]
     },
+    myMessageCount: {
+        type: Number,
+        default: 0,
+        required: true,
+        min: [0, "message count should not below zero"]
+    },
+    readMessages: {
+        type: Number,
+        default: 0,
+        required: true,
+        min: [0, "message read count is below zero"]
+    },
     state: {
         type: String,
         default: 'Not added',

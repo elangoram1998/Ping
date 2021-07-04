@@ -9,8 +9,10 @@ import { environment } from 'src/environments/environment';
 import { selectAccount } from '../auth/selectors/account.selectors';
 import { insertMessage, updateMessageState } from '../chat/actions/messages.actions';
 import { selectChatRoom } from '../chat/selectors/messages.selectors';
-import { updateMessageCount } from '../home/actions/contacts.actions';
+import { updateMessageCount, updateMyMsgCount } from '../home/actions/contacts.actions';
+import { selectContact } from '../home/selectors/contacts.selectors';
 import { Account } from '../interfaces/account';
+import { Contact } from '../interfaces/contact';
 import { Message } from '../interfaces/message';
 import { MessageCollection } from '../interfaces/message-collection';
 import { AppState } from '../reducers';
@@ -44,6 +46,7 @@ export class SocketService implements OnDestroy {
     });
     this.socket.on('message', (payload: { message: Message, roomID: string }) => {
       this.updateMessageCollection(payload.message, payload.roomID);
+      this.updateTotalMessageCount(payload.roomID);
     });
     this.socket.on('updateMsgState', (payload: { roomID: string, updatedMsg: Message[] }) => {
       this.updateMessageState(payload.updatedMsg, payload.roomID);
@@ -61,6 +64,7 @@ export class SocketService implements OnDestroy {
 
     this.socket.emit('sendMessage', { roomID, myID, text, contactID }, (response: { message: Message, roomID: string }) => {
       this.updateMessageCollection(response.message, roomID);
+      this.updateMyMessageCount(roomID);
     });
   }
 
@@ -93,6 +97,41 @@ export class SocketService implements OnDestroy {
     }
     this.store.dispatch(insertMessage({ update }));
     chatRoomSubscription.unsubscribe();
+  }
+
+  updateMyMessageCount(roomID: string) {
+    let updatedContact!: Contact | undefined;
+    let contactSubscription: Subscription = this.store.pipe(select(selectContact, { roomID: roomID })).subscribe(
+      contact => {
+        updatedContact = contact;
+      }
+    );
+    updatedContact = Object.assign({}, updatedContact);
+    updatedContact.myMessageCount++;
+    updatedContact.totalMessageCount++;
+    const update: Update<Contact> = {
+      id: roomID,
+      changes: updatedContact
+    }
+    this.store.dispatch(updateMyMsgCount({ update }));
+    contactSubscription.unsubscribe();
+  }
+
+  updateTotalMessageCount(roomID: string) {
+    let updatedContact!: Contact | undefined;
+    let contactSubscription: Subscription = this.store.pipe(select(selectContact, { roomID: roomID })).subscribe(
+      contact => {
+        updatedContact = contact;
+      }
+    );
+    updatedContact = Object.assign({}, updatedContact);
+    updatedContact.totalMessageCount++;
+    const update: Update<Contact> = {
+      id: roomID,
+      changes: updatedContact
+    }
+    this.store.dispatch(updateMessageCount({ update }));
+    contactSubscription.unsubscribe();
   }
 
   updateMessageState(messages: Message[], roomID: string) {

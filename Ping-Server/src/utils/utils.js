@@ -2,7 +2,6 @@ const Contact = require('../model/contactsCollection');
 
 const updateTotalMessageCount = async (roomID) => {
     const contact = await Contact.find({ roomID });
-    console.log(contact);
     await Contact.updateMany(
         {
             _id: {
@@ -17,6 +16,21 @@ const updateTotalMessageCount = async (roomID) => {
     );
 }
 
+const updateMyMessageCount = async (myID, roomID) => {
+    await Contact.updateOne(
+        {
+            myID,
+            roomID
+        },
+        {
+            $inc: {
+                myMessageCount: 1
+            }
+        }
+    )
+}
+
 module.exports = {
-    updateTotalMessageCount
+    updateTotalMessageCount,
+    updateMyMessageCount
 }

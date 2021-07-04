@@ -4,7 +4,7 @@
         <div class="col-sm-4">
             <app-call-notification></app-call-notification>
             <mat-toolbar>
-                <img [src]="contact?.contactID?.avatar" width="45" height="45">
+                <img class="avatar-img" [src]="contact?.contactID?.avatar" width="45" height="45">
                 <span>{{contact?.contactID?.username}}</span>
                 <span class="spacer"></span>
                 <button matTooltip="video call" type="button" mat-icon-button (click)="mediaCall()">

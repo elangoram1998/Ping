@@ -42,7 +42,12 @@
                             *ngFor="let contact of contacts$ | async">
                             <img matListAvatar [src]="contact.contactID.avatar">
                             <p matLine><b>{{contact.contactID.username}}</b></p>
-                            <span class="badge badge-pill badge-success">Success</span>
+                            <span class="example-spacer"></span>
+                            <div *ngIf="(contact.totalMessageCount -
+                            (contact.readMessages+contact.myMessageCount))>0">
+                                <span class="badge rounded-pill bg-success">{{contact.totalMessageCount -
+                                    (contact.readMessages+contact.myMessageCount)}}</span>
+                            </div>
                             <mat-divider></mat-divider>
                         </mat-list-option>
                     </mat-selection-list>

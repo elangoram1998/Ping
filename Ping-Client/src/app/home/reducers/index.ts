@@ -7,7 +7,7 @@ import {
 import { logout } from 'src/app/auth/actions/account.actions';
 import { Contact } from 'src/app/interfaces/contact';
 import { environment } from '../../../environments/environment';
-import { allContactsLoaded, contactAdded, updateMessageCount, updateReadMsgCount } from '../actions/contacts.actions';
+import { allContactsLoaded, contactAdded, updateMessageCount, updateMyMsgCount, updateReadMsgCount } from '../actions/contacts.actions';
 
 export const contactsFeatureKey = 'contacts';
 
@@ -29,6 +29,7 @@ export const contactReducer = createReducer(
   on(contactAdded, (state, action) => adapter.addOne(action.contact, state)),
   on(updateMessageCount, (state, action) => adapter.updateOne(action.update, state)),
   on(updateReadMsgCount, (state, action) => adapter.updateOne(action.update, state)),
+  on(updateMyMsgCount, (state, action) => adapter.updateOne(action.update, state)),
   on(logout, (state, action) => adapter.removeAll(state))
 );
 

@@ -3,7 +3,7 @@ const ChatRoom = require('../model/chatRoomCollection');
 const Message = require('../model/messageCollection');
 const { removeUser, getSocketID, addPeer, removePeer } = require('./users');
 const { sendMessage } = require('./realTimeData');
-const { updateTotalMessageCount } = require('./utils');
+const { updateTotalMessageCount, updateMyMessageCount } = require('./utils');
 
 const errorMsg = chalk.underline.red.bold;
 const success = chalk.underline.green.bold;
@@ -27,6 +27,7 @@ class WebSocket {
                 chatRoom.messages.push(message._id);
                 await chatRoom.save();
                 updateTotalMessageCount(roomID);
+                updateMyMessageCount(myID, roomID);
                 const messagePopulated = await message.populate('owner_id').execPopulate();
                 sendMessage(contactID, roomID, messagePopulated);
                 callback({ message: messagePopulated, roomID });

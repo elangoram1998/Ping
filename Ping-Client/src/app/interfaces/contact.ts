@@ -5,5 +5,7 @@ export interface Contact {
     roomID: string,
     totalMessageCount: number,
     readMessageCount: number,
+    myMessageCount: number,
+    readMessages: number,
     state: string,
 }

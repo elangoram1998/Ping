@@ -91,6 +91,9 @@ const updateMessageState = async (req, res, next) => {
         {
             $set: {
                 readMessageCount: messages[messageSize - 1].messageCount
+            },
+            $inc: {
+                readMessages: messageSize
             }
         }
     ).catch((error) => {

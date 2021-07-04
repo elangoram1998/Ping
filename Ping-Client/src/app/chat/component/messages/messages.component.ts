@@ -81,7 +81,7 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
           this.updatedMessages[0].messageHeight = msgTopHeight;
         }
         this.updateMessageHeight();
-        this.updateMessageCount();
+        //this.updateMessageCount();
         if (this.chatContainer.nativeElement.scrollHeight <= 610) {
           this.currentScrollHeight = this.updatedMessages[childrenSize - 1].messageHeight;
           this.updateScrollHeight(this.currentScrollHeight, this.chatContainer.nativeElement.scrollHeight);
@@ -145,9 +145,11 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
     this.store.dispatch(updateMessageCount({ update }));
   }
 
-  updateReadMessageCount(count: number) {
+  updateReadMessageCount(count: number, readCount: number) {
+    console.log("read count: " + readCount);
     this.updatedContact = Object.assign({}, this.updatedContact);
     this.updatedContact.readMessageCount = count;
+    this.updatedContact.readMessages += readCount;
     const update: Update<Contact> = {
       id: this.roomID,
       changes: this.updatedContact
@@ -158,12 +160,12 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
   markAsRead() {
     let messagesInInterval: Message[] = [];
     const start = this.contact?.readMessageCount || 0;
-    console.log("start count: " + start);
+    console.log("Start count: " + start);
     let end = 0;
     for (var i = start; i < this.messagesCount; i++) {
       if (this.updatedMessages[i].messageHeight <= this.currentScrollHeight + 15) {
         if (this.updatedMessages[i].owner_id._id !== this.account._id) {
-          console.log("inside contact message");
+          console.log("Push messages");
           messagesInInterval.push(this.updatedMessages[i]);
           end = i;
         }
@@ -173,17 +175,16 @@ export class MessagesComponent implements OnInit, OnChanges, AfterViewInit, OnDe
       }
     }
     if (messagesInInterval.length > 0) {
-      messagesInInterval = [];
-      console.log("update state");
-      for (var i = start; i <= end; i++) {
+      let messages: Message[] = [];
+      for (var i = messagesInInterval[0].messageCount - 1; i <= end; i++) {
         this.updatedMessages[i] = Object.assign({}, this.updatedMessages[i]);
-        console.log("inside state change for loop");
+        console.log("Change to read state");
         this.updatedMessages[i].state = 'read';
-        messagesInInterval.push(this.updatedMessages[i]);
+        messages.push(this.updatedMessages[i]);
       }
-      this.messageService.updateMessageState(this.roomID, messagesInInterval, this.contactID).subscribe(console.log);
+      this.messageService.updateMessageState(this.roomID, messages, this.contactID).subscribe(console.log);
       this.updateMessageState();
-      this.updateReadMessageCount(this.updatedMessages[end].messageCount);
+      this.updateReadMessageCount(this.updatedMessages[end].messageCount, messages.length);
     }
   }
 
